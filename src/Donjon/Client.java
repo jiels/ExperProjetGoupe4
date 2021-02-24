@@ -13,6 +13,7 @@ public class Client {
 	private BufferedReader in =null;
 	private Socket socket;
 	
+	//Constructor
 	public Client() throws ConnectException{
 		try {
 			socket = new Socket("127.0.0.1", 6112);
@@ -24,9 +25,16 @@ public class Client {
 	}
 	
 	
+	//Methods
+	
 	
 	public boolean touche(String commandes) throws CommandException {
-		boolean vf = false ;
+		/*Cette méthode permet de vérifier que le joueur a bien entre 4 actions
+		 * et que ce sont bien les commandes z,q,s,d qui on été saisie .
+		 * 
+		 *Si l'une des deux conditions n'est pas respecter elle émaint une CommandException.
+		 */
+		boolean vf = false;
 		if(commandes.length()==4) {
 			for (int i=0;i < commandes.length() ;i++) {
 				if(String.valueOf( commandes.charAt(i)).equals("z")||String.valueOf( commandes.charAt(i)).equals("q")||String.valueOf( commandes.charAt(i)).equals("d")||String.valueOf( commandes.charAt(i)).equals("s")) {
