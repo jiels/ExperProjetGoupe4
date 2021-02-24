@@ -25,6 +25,28 @@ public class Client {
 	
 	
 	
+	public boolean touche(String commandes) throws CommandException {
+		boolean vf = false ;
+		if(commandes.length()==4) {
+			for (int i=0;i < commandes.length() ;i++) {
+				if(String.valueOf( commandes.charAt(i)).equals("z")||String.valueOf( commandes.charAt(i)).equals("q")||String.valueOf( commandes.charAt(i)).equals("d")||String.valueOf( commandes.charAt(i)).equals("s")) {
+					vf =true;
+				}
+				else {
+					vf=false;
+					throw new CommandException("Une ou plusieur des commandes entrer son invalide les commandes son :"
+							+ "z=avancer, s=reculer, q= aller a gauched =aller a droite");
+				}
+			}
+		}
+		else {
+			throw new CommandException();	
+		}
+	 	return vf;
+	 }
+	
+	
+	
 	public  void loop(){
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
@@ -34,13 +56,11 @@ public class Client {
 			out.println(commande);
 			String reponse;
 			try {
-			if(commande.length()==4) {
+				touche(commande);
 				reponse = in.readLine();
 				System.out.println(reponse);
-				}
-			else {
-				throw new CommandLengthExeption();}
-			}catch(IOException | CommandLengthExeption e){
+				
+			}catch(IOException | CommandException e){
 				System.out.println(e.getMessage());
 				loop();
 				}
