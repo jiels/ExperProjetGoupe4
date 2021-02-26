@@ -45,8 +45,8 @@ public class Client {
 				}
 				else {
 					vf=false;
-					throw new CommandException("Une ou plusieur des commandes entrer son invalide les commandes son :"
-							+ "z=avancer, s=reculer, q= aller a gauched =aller a droite");
+					throw new CommandException("Une ou plusieurs des commandes entées sont invalides. Les commandes sont :"
+							+ "z=avancer, s=reculer, q=aller à gauche, d=aller à droite et oui");
 				}
 			}
 		}
