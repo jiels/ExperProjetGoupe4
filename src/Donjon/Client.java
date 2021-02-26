@@ -14,7 +14,7 @@ public class Client {
 	private Socket socket;
 	
 	//Constructor
-	public Client() throws ConnectException{
+	public Client() {
 		try {
 			socket = new Socket("127.0.0.1", 6112);
 			out= new PrintStream(socket.getOutputStream());
@@ -77,7 +77,7 @@ public class Client {
 	
 
 
-	public static void main(String argv[]) throws ConnectException {
+	public static void main(String argv[]) {
         Client c =new Client();
         c.loop();
     }
