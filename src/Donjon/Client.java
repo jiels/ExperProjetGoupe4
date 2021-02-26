@@ -23,7 +23,13 @@ public class Client {
 				a.printStackTrace();
 				}
 	}
+	public void Serveur(){
+	String a;
+	String b;
+	a=b;
+	}
 	
+
 	
 	//Methods
 	
