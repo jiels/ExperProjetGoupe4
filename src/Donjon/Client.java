@@ -33,7 +33,7 @@ public class Client {
 	
 	public boolean touche(String commandes) throws CommandException {
 		/*Cette méthode permet de vérifier que le joueur a bien entre 4 actions
-		 * et que ce sont bien les commandes z,q,s,d qui ont été saisies .
+		 * et que ce sont bien les commandes z,q,s,d qui ont été saisiesssss .
 		 * 
 		 *Si l'une des deux conditions n'est pas respecter elle émaint une CommandException.
 		 */
