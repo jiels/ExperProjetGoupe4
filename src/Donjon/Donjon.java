@@ -48,10 +48,10 @@ public class Donjon extends JPanel {
 				if(j == 400 && i==750) {
 					
 				}
-				if((i==1||i==800)&&(j==1||j==450)) {
+				else if(i==0||i==800||j==0||j==450) {
 					g2.drawImage(mur, i, j, null);
 				}
-				if((i!=1||i!=800)&&(j!=1||j!=450)) {
+				else {
 					g2.drawImage(piere, i, j, null);
 				}
 				
