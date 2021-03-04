@@ -25,9 +25,9 @@ public class Scene extends JPanel {
 		
 		this.xSol = -50; //comme-ca l'image déborde de chaque coté de notre frame
 		
-		sol = new ImageIcon(getClass().getResource("/Images/sol.png"));
+		sol = new ImageIcon("/src/images/sol.jpg");
 		this.fondSol = this.sol.getImage();
-		piere = new ImageIcon(getClass().getResource("/Images/piere.png"));
+		piere = new ImageIcon("/src/images/piere.png");
 		this.fondPiere=this.piere.getImage();
 
 	}
@@ -36,11 +36,9 @@ public class Scene extends JPanel {
 	//METHODES
 	@Override
 	public void paintComponents(Graphics g) {
-		// TODO Auto-generated method stub
 		super.paintComponents(g);
-		Graphics g2 = (Graphics2D)g;
 		
-		g2.drawImage(this.fondSol,this.xSol,0,null);
+		g.drawImage(this.fondSol,this.xSol,0,null);
 		
 	}
 
