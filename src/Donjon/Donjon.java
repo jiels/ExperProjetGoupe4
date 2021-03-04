@@ -55,8 +55,7 @@ public class Donjon extends JPanel {
 					g2.drawImage(piere, i, j, null);
 				}
 				
-			}
-			
+			}	
 		}
 		
 	}
