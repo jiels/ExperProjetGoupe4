@@ -14,10 +14,9 @@ public class Donjon extends JPanel {
 	private ImageIcon piereFond;
 	private Image  piere;
 	private int xFond1;
+	private ImageIcon murFond;
+	private Image  mur;
 	
-	private ImageIcon barIfoFond;
-	private Image  barIfo;
-
 	
 	
 	//CONSTRUCTEUR
@@ -29,8 +28,8 @@ public class Donjon extends JPanel {
 		this.fond1 = this.solFond.getImage();
 		piereFond = new ImageIcon("src/images/piere.png");
 		this.piere = this.piereFond.getImage();
-		barIfoFond = new ImageIcon("src/images/bande_nor.png");
-		this.barIfo = this.barIfoFond.getImage();
+		murFond = new ImageIcon("src/images/mur.png");
+		this.mur = this.murFond.getImage();
 		
 		
 	}
@@ -44,11 +43,18 @@ public class Donjon extends JPanel {
 		Graphics g2 = (Graphics2D) g;
 		g2.drawImage(this.fond1, this.xFond1, 0, null);//dessin de l'image de fond
 		
-		
 		for(int i = 0; i<=800; i= i+50) {
 			for(int j = 0; j<=450; j= j+50) {
-				g2.drawImage(piere, i, j, null);
-				g2.drawImage(barIfo, 400, 400, null);
+				if(j == 400 && i==750) {
+					
+				}
+				if((i==1||i==800)&&(j==1||j==450)) {
+					g2.drawImage(mur, i, j, null);
+				}
+				if((i!=1||i!=800)&&(j!=1||j!=450)) {
+					g2.drawImage(piere, i, j, null);
+				}
+				
 			}
 			
 		}
