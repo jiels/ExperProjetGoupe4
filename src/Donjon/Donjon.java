@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class Donjon extends JPanel {
 	private ImageIcon solFond;
-	private Image  fond1;
+	private Image  sol;
 	private ImageIcon piereFond;
 	private Image  piere;
 	private int xFond1;
@@ -25,7 +25,7 @@ public class Donjon extends JPanel {
 		this.xFond1 = -50;
 		
 		solFond = new ImageIcon("src/images/sol.jpg");
-		this.fond1 = this.solFond.getImage();
+		this.sol = this.solFond.getImage();
 		piereFond = new ImageIcon("src/images/piere.png");
 		this.piere = this.piereFond.getImage();
 		murFond = new ImageIcon("src/images/mur.png");
@@ -41,7 +41,7 @@ public class Donjon extends JPanel {
 		super.paintComponent(g);
 		
 		Graphics g2 = (Graphics2D) g;
-		g2.drawImage(this.fond1, this.xFond1, 0, null);//dessin de l'image de fond
+		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
 		
 		for(int i = 0; i<=800; i= i+50) {
 			for(int j = 0; j<=450; j= j+50) {
