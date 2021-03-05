@@ -3,12 +3,12 @@ package Donjon;
 import javax.swing.JFrame;
 
 public class Main {
-	//INITIALISATION
+	//***INITIALISATION***//
 	public static Donjon scene;
 
 	public static void main(String[] args) {
 		
-		// Création de la fenetre de jeux 
+		//***CREATION DE LA FENETRE DE JEUX***//
 		JFrame frame = new JFrame("the dungeon of hope");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//quand on clique sur la croix rouge en haut de la frame on ferme le programme
 		frame.setSize(865,540);//résolution de la frame
@@ -16,7 +16,7 @@ public class Main {
 		frame.setResizable(false);//interdiction de redimensionner.
 		frame.setAlwaysOnTop(true);//toujour au dessu des autre fenêtre
 		
-		//instance odjet scenne
+		//***INSTANCIATION DE L'OBJET SCENE***//
 		scene = new Donjon();
 		
 		frame.setContentPane(scene);//association de la scene a la frame

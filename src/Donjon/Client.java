@@ -9,7 +9,9 @@ public class Client {
 	private BufferedReader in =null;
 	private Socket socket;
 	
-	//Constructor
+
+//***CONSTRUCTEUR***//
+	
 	public Client() {
 		try {
 			socket = new Socket("127.0.0.1", 6112);
@@ -24,7 +26,7 @@ public class Client {
 	
 
 	
-	//Methods
+//***METHODES***//
 	
 	
 	public boolean touche(String commandes) throws CommandException {
@@ -40,7 +42,6 @@ public class Client {
 					vf =true;
 				}
 				else {
-					vf=false;
 					throw new CommandException("Une ou plusieur des commandes entrer son invalide les commandes son :"
 							+ "z=avancer, s=reculer, q= aller a gauched =aller a droite");
 				}
@@ -75,7 +76,8 @@ public class Client {
 	}
 	
 
-
+//***MAIN***//
+	
 	public static void main(String argv[]) {
         Client c =new Client();
         c.loop();
