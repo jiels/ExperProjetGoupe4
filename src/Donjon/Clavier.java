@@ -31,6 +31,7 @@ public class Clavier implements KeyListener  {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		Main.scene.setX(0);
+		Main.scene.setY(0);
 		
 	}
 
