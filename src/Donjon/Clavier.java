@@ -8,9 +8,6 @@ public class Clavier implements KeyListener  {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
-		
-		
-		
 	}
 
 	@Override
@@ -21,6 +18,12 @@ public class Clavier implements KeyListener  {
 		}
 		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
 			Main.scene.setX(-1);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			Main.scene.setY(1);
+		}
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+			Main.scene.setY(-1);
 		}
 		
 	}

@@ -45,6 +45,10 @@ public class Donjon extends JPanel {
 		persoFond = new ImageIcon("src/images/perso0.png");
 		this.perso = this.persoFond.getImage();
 		
+		this.setFocusable(true);
+		this.requestFocusInWindow();
+		this.addKeyListener(new Clavier());
+		
 		Thread ecranRefresh = new Thread(new SceenRefresh() );
 		ecranRefresh.start();
 		
@@ -53,8 +57,13 @@ public class Donjon extends JPanel {
 	
 	//***METHODES***//
 	public void deplacementPersoX() {
-		if(this.persoX!=750) {
+		if(this.persoX!=750||this.persoX!=50) {
 			this.persoX = this.persoX + this.x;
+		}
+	}
+	public void deplacementPersY() {
+		if(this.persoY!=100||this.persoY!=400) {
+			this.persoY = this.persoY + this.y;
 		}
 	}
 
@@ -66,6 +75,7 @@ public class Donjon extends JPanel {
 		Graphics g2 = (Graphics2D) g;
 		
 		this.deplacementPersoX();
+		this.deplacementPersY();
 		
 		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
 		g2.drawImage(this.perso,this.persoX,this.persoY, null);//posistion du personnage
