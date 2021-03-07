@@ -13,7 +13,7 @@ public class Mur extends Objet {
 	
 	//***CONSTRUCTEUR***//
 	public Mur(int x, int y) {
-		super(x,y,50,50);
+		super(x,y,38,38);
 		this.icoMur = new ImageIcon("src/images/mur.png");
 		this.imgMur = this.icoMur.getImage();
 	}

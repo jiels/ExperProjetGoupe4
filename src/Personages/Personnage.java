@@ -4,6 +4,8 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import Objet.Objet;
+
 public class Personnage {
 	//***INITIALISATION***//
 	private int largeur , hauteur;//Dimontion du perso
@@ -11,6 +13,8 @@ public class Personnage {
 	private boolean marche;
 	private boolean versDroite;
 	private boolean versGauche;
+	private boolean versH;
+	private boolean versB;
 	private int compteur;
 	
 	
@@ -25,6 +29,8 @@ public class Personnage {
 		 this.marche=false;
 		 this.versDroite=false;
 		 this.versGauche = false;
+		 this.versH=false;
+		 this.versB=false;
 		 
 	 }
 	 
@@ -93,7 +99,38 @@ public class Personnage {
 	}
 		 
 		 
-	 
+	 public boolean collision(Objet r) {
+		 /*
+		  * j'ai trouver ce code dans le tuto d'un youtubeur 
+		  * nommé "BroCode"
+		  * voici le lien vers la vidéo
+		  * https://www.youtube.com/watch?v=qIr2XYZrznI
+		  */
+		 boolean a = false;
+		 int rw = r.getHauteur();
+		 int rh = r.getLargeur();
+		 int jw = this.largeur;
+		 int jh = this.hauteur;
+		 /////////////////////
+		 int jx = this.x;
+		 int jy = this.y;
+		 int rx = r.getX();
+		 int ry = r.getY();
+		 /////////////////////
+		 rw+=rx;
+		 rh+=ry;
+		 jw+=jx;
+		 jh+=jy;
+		if(this.isVersDroite() == true ||this.isVersGauche()==true || (this.isVersDroite() == false&&this.isVersGauche()==false) ){
+			if((rw < rx || rw> jx)&&(rh < ry || rh >jy)&&(jw < jx || jw >rx)&&(jh < jy || jh > ry)) {
+				a = true;
+			}
+		}
+		else {a= false;}
+		return a;
+	}
+	
+
 
 	 
 	 
@@ -176,6 +213,24 @@ public class Personnage {
 	public void setCompteur(int compteur) {
 		this.compteur = compteur;
 	}
+
+	public boolean isVersH() {
+		return versH;
+	}
+
+	public void setVersH(boolean versH) {
+		this.versH = versH;
+	}
+
+	public boolean isVersB() {
+		return versB;
+	}
+
+	public void setVersB(boolean versB) {
+		this.versB = versB;
+	}
+	
+	
 
 	 
 	 

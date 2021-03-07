@@ -13,7 +13,7 @@ public class Jouer extends Personnage{
 	//**CONSTRUCTEUR***// 
 	public Jouer(int x, int y) {
 		
-	super(x,y,50,50);
+	super(x,y,25,25);
 	this.icoPerso = new ImageIcon("src/images/perso0.png");
 	this.imgPerso = this.icoPerso.getImage();
 		
