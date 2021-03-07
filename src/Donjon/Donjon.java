@@ -28,6 +28,7 @@ public class Donjon extends JPanel {
 	public Jouer joueur;
 	public Mur mur;
 	public Pierre pierre;
+	
 
 	
 	
@@ -40,9 +41,6 @@ public class Donjon extends JPanel {
 		
 		solFond = new ImageIcon("src/images/sol.jpg");
 		this.sol = this.solFond.getImage();
-		/*
-		persoFond = new ImageIcon("src/images/perso0.png");
-		this.perso = this.persoFond.getImage();*/
 		
 		joueur = new Jouer(this.persoX,this.persoY);
 		mur = new Mur(50, 50);
@@ -95,13 +93,13 @@ public class Donjon extends JPanel {
 		
 		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
 		g2.drawImage(this.joueur.marche("joueur", 10),this.persoX,this.persoY, null);//posistion du personnage
-		g2.drawImage(this.mur.getImgMur(),700,400,null);
-		/*for(int x=0; x<= 800;x=x+50) {
+		g2.drawImage(this.mur.getImgMur(),0,0,null);
+		for(int x=0; x<= 800;x=x+50) {
 			for(int y = 0 ; y<=450;y=y+50) {
 				if(x==0||x==800||y==0||y==450) {
 				g2.drawImage(this.mur.getImgMur(),x,y,null);
 			}	
-		}}*/
+		}}
 		
 		
 	}
