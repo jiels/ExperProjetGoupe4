@@ -41,7 +41,6 @@ public class Donjon extends JPanel {
 		
 		solFond = new ImageIcon("src/images/sol.jpg");
 		this.sol = this.solFond.getImage();
-		
 		joueur = new Jouer(this.persoX,this.persoY);
 		mur = new Mur(50, 50);
 	
@@ -51,10 +50,10 @@ public class Donjon extends JPanel {
 		this.addKeyListener(new Clavier());
 		
 		Thread ecranRefresh = new Thread(new SceenRefresh() );
-		ecranRefresh.start();
-		
-		
-	}
+		ecranRefresh.start();}
+	
+	
+	
 	
 	//***METHODES***//
 	public void deplacementPersoX() {
