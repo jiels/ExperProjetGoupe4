@@ -14,6 +14,8 @@ public class Objet {
 		
 	}
 	
+	//***METHODES***//
+	
 	
 	//***SETTER & GETTTER*///
 
@@ -47,7 +49,7 @@ public class Objet {
 	public void setY(int y) {
 		this.y = y;}
 	
-	//***METHODES***//
+	
 	
 	
 	
