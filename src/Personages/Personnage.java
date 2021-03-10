@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+
 import Objet.Objet;
 
 public class Personnage {
@@ -133,21 +134,22 @@ public class Personnage {
 		else {a= false;}
 		return a;
 	}
-
-	 
-	 
-	 
+ 
 	 public void ramaserVie(Objet odjet) {
 		 if(this.collision(odjet)) {
+			 odjet.setX(0);
+			 odjet.setY(0);
 			 setVie(1);
 		 }
 	 }
 	 public void ramaserPotion(Objet odjet) {
 		 if(this.collision(odjet)) {
+			 odjet.setX(0);
+			 odjet.setY(0);
 			 setPotion(1);
 		 }
 	 }
-	 
+	  
 
 
 	 

@@ -6,6 +6,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import Objet.PotionVie;
+import Objet.Bombe;
 import Objet.Mur;
 import Objet.Objet;
 import Objet.Pierre;
@@ -14,7 +16,7 @@ import Personages.Jouer;
 
 @SuppressWarnings("serial")
 public class Donjon extends JPanel {
-	//***INITIALISATION***//
+//***INITIALISATION***//
 	private ImageIcon solFond;
 	private Image  sol;
 	private int xFond1;		
@@ -25,7 +27,7 @@ public class Donjon extends JPanel {
 	private int y;
 	
 	public Jouer joueur;
-	//initialisation objet
+	//initialisation mur//
 	public Mur mur;
 	public Mur mur2;
 	public Mur mur3;
@@ -44,11 +46,20 @@ public class Donjon extends JPanel {
 	public Mur mur16;
 	public Mur mur17;
 	public Mur mur18;
+	
+	//initialisation coeur//
+	public PotionVie p1;
+	public PotionVie p2;
+	public PotionVie p3;
+	
+	//initialisation bombe//
+	public Bombe b1;
+	
 	public Pierre pierre;
 
 	
 	
-	//***CONSTRUCTEUR***//
+//***CONSTRUCTEUR***//
 	public Donjon() {
 		super();
 		this.xFond1 = -50;
@@ -83,7 +94,14 @@ public class Donjon extends JPanel {
 		mur17 = new Mur(200,100);
 		mur18 = new Mur(400,350);
 		 
+		//Plmacement Coeur
+		p1 =new PotionVie(750, 100);
+		p2 =new PotionVie(150, 50);
+		p3 =new PotionVie(350, 300);
 	
+		//Plmacement Bombe
+		b1 = new Bombe(700, 400);
+		
 		///////////////////////////
 		this.setFocusable(true);
 		this.requestFocusInWindow();
@@ -95,7 +113,7 @@ public class Donjon extends JPanel {
 	
 	
 	
-	//***METHODES***//
+//***METHODES***//
 	public void deplacementPersoX() {
 		if(this.persoX==769) {
 			this.persoX = this.persoX -4;
@@ -167,6 +185,13 @@ public class Donjon extends JPanel {
 		solide(mur16);
 		solide(mur17);
 		solide(mur18);
+		
+		// Ramase coeur
+		joueur.ramaserVie(p1);
+		joueur.ramaserVie(p2);
+		joueur.ramaserVie(p3);
+		
+		// bombe exlose
 
 
 		
@@ -181,7 +206,7 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
 		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
 		
-		//placement des murs
+		//affichage des murs
 		g2.drawImage(this.mur.getImgMur(),700,350,null);
 		g2.drawImage(this.mur2.getImgMur(),700,300,null);
 		g2.drawImage(this.mur3.getImgMur(),this.mur3.getX(),this.mur3.getY(),null);
@@ -201,7 +226,13 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.mur17.getImgMur(),this.mur17.getX(),this.mur17.getY(),null);
 		g2.drawImage(this.mur18.getImgMur(),this.mur18.getX(),this.mur18.getY(),null);
 	
+		//affichage des coeurs
+		g2.drawImage(this.p1.getImgpotion(),this.p1.getX(),this.p1.getY(),null);
+		g2.drawImage(this.p1.getImgpotion(),this.p2.getX(),this.p2.getY(),null);
+		g2.drawImage(this.p1.getImgpotion(),this.p3.getX(),this.p3.getY(),null);
 		
+		//affichage des bombes
+		g2.drawImage(this.b1.getImgBombe(),this.b1.getX(),this.b1.getY(),null);
 		
 		//placement des murs de délimitation de la zone d'action du persopnnage
 		for(int x=0; x<= 800;x=x+50) {
@@ -218,7 +249,7 @@ public class Donjon extends JPanel {
 	
 	
 	
-	//***GETTER & SETTER***//
+//***GETTER & SETTER***//
 	
 	public int getX() {
 		return x;
