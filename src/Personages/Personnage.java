@@ -16,6 +16,8 @@ public class Personnage {
 	private boolean versH;
 	private boolean versB;
 	private int compteur;
+	private int vie;
+	private int potion;
 	
 	
 	
@@ -31,6 +33,8 @@ public class Personnage {
 		 this.versGauche = false;
 		 this.versH=false;
 		 this.versB=false;
+		 setVie(5);
+		 this.potion=0;
 		 
 	 }
 	 
@@ -129,7 +133,21 @@ public class Personnage {
 		else {a= false;}
 		return a;
 	}
-	
+
+	 
+	 
+	 
+	 public void ramaserVie(Objet odjet) {
+		 if(this.collision(odjet)) {
+			 setVie(1);
+		 }
+	 }
+	 public void ramaserPotion(Objet odjet) {
+		 if(this.collision(odjet)) {
+			 setPotion(1);
+		 }
+	 }
+	 
 
 
 	 
@@ -214,6 +232,7 @@ public class Personnage {
 		this.compteur = compteur;
 	}
 
+	
 	public boolean isVersH() {
 		return versH;
 	}
@@ -222,6 +241,7 @@ public class Personnage {
 		this.versH = versH;
 	}
 
+	
 	public boolean isVersB() {
 		return versB;
 	}
@@ -229,6 +249,31 @@ public class Personnage {
 	public void setVersB(boolean versB) {
 		this.versB = versB;
 	}
+
+	
+	
+	public int getVie() {
+		return vie;
+	}
+
+	
+	public void setVie(int vie) {
+		if(this.vie<5) {
+			this.vie += vie;
+		}
+	}
+
+	
+	
+	public int getPotion() {
+		return potion;
+	}
+
+	public void setPotion(int potion) {
+		this.potion += potion;
+	}
+	
+	
 	
 	
 
