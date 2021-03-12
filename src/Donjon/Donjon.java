@@ -239,7 +239,7 @@ public class Donjon extends JPanel {
 		//affichage des bombes
 		g2.drawImage(this.b1.getImgBombe(),this.b1.getX(),this.b1.getY(),null);
 		
-		//placement des murs de délimitation de la zone d'action du persopnnage
+		//placement des murs de délimitation de la zone d'action du personnage
 		for(int x=0; x<= 800;x=x+50) {
 			for(int y = 0 ; y<=450;y=y+50) {
 				if(x==0||x==800||y==0||y==450) {
