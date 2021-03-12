@@ -4,7 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-
+import Objet.Bombe;
 import Objet.Objet;
 
 public class Personnage {
@@ -126,7 +126,7 @@ public class Personnage {
 		 rh+=ry;
 		 jw+=jx;
 		 jh+=jy;
-		if(this.isVersDroite() == true ||this.isVersGauche()==true || (this.isVersDroite() == false&&this.isVersGauche()==false) ){
+		if(this.isVersDroite() == true ||this.isVersGauche()==true || (this.isVersH() == true||this.isVersB()==true) ){
 			if((rw < rx || rw> jx)&&(rh < ry || rh >jy)&&(jw < jx || jw >rx)&&(jh < jy || jh > ry)) {
 				a = true;
 			}
@@ -135,13 +135,7 @@ public class Personnage {
 		return a;
 	}
  
-	 public void ramaserVie(Objet odjet) {
-		 if(this.collision(odjet)) {
-			 odjet.setX(0);
-			 odjet.setY(0);
-			 setVie(1);
-		 }
-	 }
+	 
 	 public void ramaserPotion(Objet odjet) {
 		 if(this.collision(odjet)) {
 			 odjet.setX(0);
@@ -149,7 +143,18 @@ public class Personnage {
 			 setPotion(1);
 		 }
 	 }
+	 
+	 public void usePotion() {
+		 if(getVie()!=0) {
+			 setPotion(-1);
+		 }
+	 }
+	 
 	  
+	 public void BombeEx(Bombe bombe) {
+		 
+		 
+	 }
 
 
 	 

@@ -3,6 +3,8 @@ package Donjon;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -26,6 +28,8 @@ public class Donjon extends JPanel {
 	private int persoY;
 	private int y;
 	
+	private ArrayList<Mur>listMur = new ArrayList<>();
+	
 	public Jouer joueur;
 	//initialisation mur//
 	public Mur mur;
@@ -46,7 +50,7 @@ public class Donjon extends JPanel {
 	public Mur mur16;
 	public Mur mur17;
 	public Mur mur18;
-	
+	/////////////////
 	//initialisation coeur//
 	public PotionVie p1;
 	public PotionVie p2;
@@ -103,6 +107,7 @@ public class Donjon extends JPanel {
 		b1 = new Bombe(700, 400);
 		
 		///////////////////////////
+		
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 		this.addKeyListener(new Clavier());
@@ -187,9 +192,9 @@ public class Donjon extends JPanel {
 		solide(mur18);
 		
 		// Ramase coeur
-		joueur.ramaserVie(p1);
-		joueur.ramaserVie(p2);
-		joueur.ramaserVie(p3);
+		joueur.ramaserPotion(p1);
+		joueur.ramaserPotion(p2);
+		joueur.ramaserPotion(p3);
 		
 		// bombe exlose
 
@@ -266,6 +271,14 @@ public class Donjon extends JPanel {
 	public void setY(int y) {
 		this.y = y;
 	}
+
+
+
+
+	public ArrayList<Mur> getListMur() {
+		return listMur;
+	}
+
 
 	
 	

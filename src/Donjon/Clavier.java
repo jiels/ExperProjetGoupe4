@@ -45,6 +45,10 @@ public class Clavier implements KeyListener  {
 			Main.scene.joueur.setVersB(false);
 			
 		}
+		if(e.getKeyCode()==KeyEvent.VK_V) {
+			Main.scene.joueur.usePotion();
+			
+		}
 		
 	}
 
