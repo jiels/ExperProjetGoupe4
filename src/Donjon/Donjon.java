@@ -212,8 +212,8 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
 		
 		//affichage des murs
-		g2.drawImage(this.mur.getImgMur(),700,350,null);
-		g2.drawImage(this.mur2.getImgMur(),700,300,null);
+		g2.drawImage(this.mur.getImgMur(),this.getX(),this.getY(),null);
+		g2.drawImage(this.mur2.getImgMur(),this.getX(),this.getY(),null);
 		g2.drawImage(this.mur3.getImgMur(),this.mur3.getX(),this.mur3.getY(),null);
 		g2.drawImage(this.mur4.getImgMur(),this.mur4.getX(),this.mur4.getY(),null);
 		g2.drawImage(this.mur5.getImgMur(),this.mur5.getX(),this.mur5.getY(),null);
