@@ -13,10 +13,26 @@ public class Main {
 		JFrame frame = new JFrame("the dungeon of hope");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//quand on clique sur la croix rouge en haut de la frame on ferme le programme
 		Scanner clavier = new Scanner(System.in);
-        System.out.print("Saisir la taille de la map en largeur : ");
-        int x = clavier.nextInt();
-        System.out.print("Saisir la taille de la map en hauteur : ");
-        int y = clavier.nextInt();
+		int x=0;
+		int y=0;
+		while(x<10||x>20) {
+			System.out.print("Saisir la taille de la map en largeur (entre 10 et 20) : ");
+	        x = clavier.nextInt();
+	        if(x<10)
+	        	System.out.println("Erreur, taille trop petite");
+	        else if(x>20)
+	        	System.out.println("Erreur, taille trop grande");
+		}
+		while(y<10||y>14) {
+			System.out.print("Saisir la taille de la map en hauteur (entre 10 et 14) : ");
+	        y = clavier.nextInt();
+	        if(y<10)
+	        	System.out.println("Erreur, taille trop petite");
+	        else if(y>14)
+	        	System.out.println("Erreur, taille trop grande");
+		}
+        x=50*(x+2)+15;
+        y=50*(y+2)+35;
 		frame.setSize(x,y);//résolution de la frame
 		frame.setLocationRelativeTo(null);//Centrer la frame a l'écran
 		frame.setResizable(false);//interdiction de redimensionner.

@@ -243,20 +243,26 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.b1.getImgBombe(),this.b1.getX(),this.b1.getY(),null);
 		
 		//placement des murs de délimitation de la zone d'action du personnage
+		
 		//for(int x=0; x<= 800;x=x+50) {
 			//for(int y = 0 ; y<=450;y=y+50) {
 				//if(x==0||x==800||y==0||y==450) {
 				//g2.drawImage(this.mur.getImgMur(),x,y,null);
 				
-			for(int x=0; x<= getXScene();x=x+50) {
-				for(int y = 0 ; y<=getYScene();y=y+50) {
-					if(x==0||x==getXScene()||y==0||y==getYScene()) {
-					g2.drawImage(this.mur.getImgMur(),x,y,null);
+			//for(int x=0; x<getXScene();x=x+50) {
+				//for(int y = 0 ; y<getYScene();y=y+50) {
+					//if(x==0||(x>=(getXScene()-50)&&x<(getXScene())||y==0||(y>=(getYScene()-50)&&y<(getYScene())))) {
+					//g2.drawImage(this.mur.getImgMur(),x,y,null);
+					
+					for(int x=0; x<=(getXScene()-50);x=x+50) {
+						for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
+							if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
+							g2.drawImage(this.mur.getImgMur(),x,y,null);
 			}	
 		}}
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
 	}
-
+//540 = 10 et 550 = 11
 
 	
 	
