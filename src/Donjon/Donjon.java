@@ -61,15 +61,18 @@ public class Donjon extends JPanel {
 	
 	public Pierre pierre;
 
+	public int xScene;
+	public int yScene;
 	
 	
 //***CONSTRUCTEUR***//
-	public Donjon() {
+	public Donjon(int xScene, int yScene) {
 		super();
 		this.xFond1 = -50;
 		this.persoX = 750;
 		this.persoY = 400;
-				
+		this.xScene = xScene;
+		this.yScene = yScene;
 		
 		//Fond
 		solFond = new ImageIcon("src/images/sol.jpg");
@@ -240,14 +243,18 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.b1.getImgBombe(),this.b1.getX(),this.b1.getY(),null);
 		
 		//placement des murs de délimitation de la zone d'action du personnage
-		for(int x=0; x<= 800;x=x+50) {
-			for(int y = 0 ; y<=450;y=y+50) {
-				if(x==0||x==800||y==0||y==450) {
-				g2.drawImage(this.mur.getImgMur(),x,y,null);
+		//for(int x=0; x<= 800;x=x+50) {
+			//for(int y = 0 ; y<=450;y=y+50) {
+				//if(x==0||x==800||y==0||y==450) {
+				//g2.drawImage(this.mur.getImgMur(),x,y,null);
+				
+			for(int x=0; x<= getXScene();x=x+50) {
+				for(int y = 0 ; y<=getYScene();y=y+50) {
+					if(x==0||x==getXScene()||y==0||y==getYScene()) {
+					g2.drawImage(this.mur.getImgMur(),x,y,null);
 			}	
 		}}
-		
-		
+			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
 	}
 
 
@@ -272,8 +279,21 @@ public class Donjon extends JPanel {
 		this.y = y;
 	}
 
+	public int getXScene() {
+		return xScene;
+	}
 
+	public void setXScene(int xScene) {
+		this.xScene = xScene;
+	}
 
+	public int getYScene() {
+		return yScene;
+	}
+
+	public void setYScene(int yScene) {
+		this.yScene = yScene;
+	}
 
 	public ArrayList<Mur> getListMur() {
 		return listMur;
