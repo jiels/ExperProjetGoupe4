@@ -3,7 +3,7 @@ package Donjon;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Clavier implements KeyListener  {
+public class ServerClavier implements KeyListener  {
 
 	@Override
 	public void keyTyped(KeyEvent e) {

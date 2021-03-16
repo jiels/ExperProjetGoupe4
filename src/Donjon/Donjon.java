@@ -113,7 +113,7 @@ public class Donjon extends JPanel {
 		
 		this.setFocusable(true);
 		this.requestFocusInWindow();
-		this.addKeyListener(new Clavier());
+		this.addKeyListener(new ServerClavier());
 		
 		Thread ecranRefresh = new Thread(new SceenRefresh() );
 		ecranRefresh.start();}
