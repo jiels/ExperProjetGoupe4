@@ -123,7 +123,7 @@ public class Donjon extends JPanel {
 	
 //***METHODES***//
 	public void deplacementPersoX() {
-		if(this.persoX==769) {
+		if(this.persoX==xScene-100) {
 			this.persoX = this.persoX -4;
 		}
 		else if (this.persoX==35){
@@ -138,7 +138,7 @@ public class Donjon extends JPanel {
 		if(this.persoY==30) {
 			this.persoY = this.persoY +4;
 		}
-		else if(this.persoY==425) {
+		else if(this.persoY==yScene-110) {
 			this.persoY = this.persoY -4;
 		}
 		else {
