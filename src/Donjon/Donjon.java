@@ -69,8 +69,8 @@ public class Donjon extends JPanel {
 	public Donjon(int xScene, int yScene) {
 		super();
 		this.xFond1 = -50;
-		this.persoX = 750;
-		this.persoY = 400;
+		this.persoX =xScene-100;
+		this.persoY = yScene-110;
 		this.xScene = xScene;
 		this.yScene = yScene;
 		
@@ -113,7 +113,7 @@ public class Donjon extends JPanel {
 		
 		this.setFocusable(true);
 		this.requestFocusInWindow();
-		this.addKeyListener(new ServerClavier());
+
 		
 		Thread ecranRefresh = new Thread(new SceenRefresh() );
 		ecranRefresh.start();}
