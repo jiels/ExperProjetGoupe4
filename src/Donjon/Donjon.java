@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -30,6 +31,17 @@ public class Donjon extends JPanel {
 	
 	private ArrayList<Mur>listMur = new ArrayList<>();
 	
+	private int nbMur;
+	
+	private void addMur(Mur m) {
+		listMur.add(m);
+	}
+	// private void addNbMur(int n) {
+	//	int i=0;
+	//	while(i<n) {
+	//	addMur(i);	
+	//	}
+	//}
 	public Jouer joueur;
 	//initialisation mur//
 	public Mur mur;
@@ -82,6 +94,9 @@ public class Donjon extends JPanel {
 		joueur = new Jouer(this.persoX,this.persoY);
 		
 		//Plmacement Murs
+		nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  		// Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
+										
+		
 		mur = new Mur(700,350);
 		mur2 = new Mur(700,300);
 		mur3 = new Mur(100,50);
@@ -254,16 +269,17 @@ public class Donjon extends JPanel {
 					//if(x==0||(x>=(getXScene()-50)&&x<(getXScene())||y==0||(y>=(getYScene()-50)&&y<(getYScene())))) {
 					//g2.drawImage(this.mur.getImgMur(),x,y,null);
 					
-					for(int x=0; x<=(getXScene()-50);x=x+50) {
-						for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
-							if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
-							g2.drawImage(this.mur.getImgMur(),x,y,null);
+		for(int x=0; x<=(getXScene()-50);x=x+50) {
+			for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
+				if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
+					g2.drawImage(this.mur.getImgMur(),x,y,null);
 			}	
 		}}
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
 	}
 //540 = 10 et 550 = 11
-
+// 1/5 = 20% de part de murs ? 
+	
 	
 	
 	
