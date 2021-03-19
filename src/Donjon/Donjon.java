@@ -36,32 +36,15 @@ public class Donjon extends JPanel {
 	private void addMur(Mur m) {
 		listMur.add(m);
 	}
-	// private void addNbMur(int n) {
-	//	int i=0;
-	//	while(i<n) {
-	//	addMur(i);	
-	//	}
-	//}
+	private void addNbMur(int nbmur) { // Alea des murs
+	for(int i=0; i<nbmur; i++) {
+		addMur(new Mur(0,0));
+		} 
+	}
 	public Jouer joueur;
 	//initialisation mur//
-	public Mur mur;
-	public Mur mur2;
-	public Mur mur3;
-	public Mur mur4;
-	public Mur mur5;
-	public Mur mur6;
-	public Mur mur7;
-	public Mur mur8;
-	public Mur mur9;
-	public Mur mur10;
-	public Mur mur11;
-	public Mur mur12;
-	public Mur mur13;
-	public Mur mur14;
-	public Mur mur15;
-	public Mur mur16;
-	public Mur mur17;
-	public Mur mur18;
+
+	
 	/////////////////
 	//initialisation coeur//
 	public PotionVie p1;
@@ -93,35 +76,19 @@ public class Donjon extends JPanel {
 		//Joueur
 		joueur = new Jouer(this.persoX,this.persoY);
 		
-		//Plmacement Murs
-		nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  		// Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
-										
+		//Placement Murs
+		nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  // Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
+		addNbMur(nbMur);
 		
-		mur = new Mur(700,350);
-		mur2 = new Mur(700,300);
-		mur3 = new Mur(100,50);
-		mur4 = new Mur(100,100);
-		mur5 = new Mur(300,300); 
-		mur6 = new Mur(350,250);
-		mur7 = new Mur(750,200);
-		mur8 = new Mur(500,200);
-		mur9 = new Mur(600,300);
-		mur10 = new Mur(600,400);
-		mur11 = new Mur(150,300);
-		mur12 = new Mur(400,150);
-		mur13 = new Mur(150,150);
-		mur14 = new Mur(650,150);
-		mur15 = new Mur(600,150);
-		mur16 = new Mur(300,100);
-		mur17 = new Mur(200,100);
-		mur18 = new Mur(400,350);
-		 
-		//Plmacement Coeur
+		
+		//addMur(Mur )
+
+		//Placement Coeur
 		p1 =new PotionVie(750, 100);
 		p2 =new PotionVie(150, 50);
 		p3 =new PotionVie(350, 300);
 	
-		//Plmacement Bombe
+		//Placement Bombe
 		b1 = new Bombe(700, 400);
 		
 		///////////////////////////
@@ -130,9 +97,9 @@ public class Donjon extends JPanel {
 		this.requestFocusInWindow();
 		this.addKeyListener(new ServerClavier());
 		
-		Thread ecranRefresh = new Thread(new SceenRefresh() );
+		Thread ecranRefresh = new Thread(new SceenRefresh());
 		ecranRefresh.start();}
-	
+	 
 	
 	
 	
@@ -179,6 +146,7 @@ public class Donjon extends JPanel {
 		}
 	}
 	
+	// Creation solide mur 
 	
 
 	
@@ -186,39 +154,22 @@ public class Donjon extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics g2 = (Graphics2D) g;
-		
+		//System.out.println(getListMur().size());
 		
 		
 		//Collision solide
-		solide(mur);
-		solide(mur2);
-		solide(mur3);
-		solide(mur4);
-		solide(mur5);
-		solide(mur6);
-		solide(mur7);
-		solide(mur8);
-		solide(mur9);
-		solide(mur10);
-		solide(mur11);
-		solide(mur12);
-		solide(mur13);
-		solide(mur14);
-		solide(mur15);
-		solide(mur16);
-		solide(mur17);
-		solide(mur18);
 		
-		// Ramase coeur
+		
+		// Ramasse coeur
 		joueur.ramaserPotion(p1);
 		joueur.ramaserPotion(p2);
 		joueur.ramaserPotion(p3);
 		
-		// bombe exlose
+		// bombe explose
 
 
 		
-		//Déplacement  personnage
+		//Déplacement personnage
 		this.deplacementPersoX();
 		this.deplacementPersY();
 		joueur.setX(persoX);
@@ -230,24 +181,24 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
 		
 		//affichage des murs
-		g2.drawImage(this.mur.getImgMur(),this.mur.getX(),this.mur.getY(),null);
-		g2.drawImage(this.mur2.getImgMur(),this.mur2.getX(),this.mur2.getY(),null);
-		g2.drawImage(this.mur3.getImgMur(),this.mur3.getX(),this.mur3.getY(),null);
-		g2.drawImage(this.mur4.getImgMur(),this.mur4.getX(),this.mur4.getY(),null);
-		g2.drawImage(this.mur5.getImgMur(),this.mur5.getX(),this.mur5.getY(),null);
-		g2.drawImage(this.mur6.getImgMur(),this.mur6.getX(),this.mur6.getY(),null);
-		g2.drawImage(this.mur7.getImgMur(),this.mur7.getX(),this.mur7.getY(),null);
-		g2.drawImage(this.mur8.getImgMur(),this.mur8.getX(),this.mur8.getY(),null);
-		g2.drawImage(this.mur9.getImgMur(),this.mur9.getX(),this.mur9.getY(),null);
-		g2.drawImage(this.mur10.getImgMur(),this.mur10.getX(),this.mur10.getY(),null);
-		g2.drawImage(this.mur11.getImgMur(),this.mur11.getX(),this.mur11.getY(),null);
-		g2.drawImage(this.mur12.getImgMur(),this.mur12.getX(),this.mur12.getY(),null);
-		g2.drawImage(this.mur13.getImgMur(),this.mur13.getX(),this.mur13.getY(),null);
-		g2.drawImage(this.mur14.getImgMur(),this.mur14.getX(),this.mur14.getY(),null);
-		g2.drawImage(this.mur15.getImgMur(),this.mur15.getX(),this.mur15.getY(),null);
-		g2.drawImage(this.mur16.getImgMur(),this.mur16.getX(),this.mur16.getY(),null);
-		g2.drawImage(this.mur17.getImgMur(),this.mur17.getX(),this.mur17.getY(),null);
-		g2.drawImage(this.mur18.getImgMur(),this.mur18.getX(),this.mur18.getY(),null);
+		//g2.drawImage(this.mur.getImgMur(),this.mur.getX(),this.mur.getY(),null);
+		//g2.drawImage(this.mur2.getImgMur(),this.mur2.getX(),this.mur2.getY(),null);
+		//g2.drawImage(this.mur3.getImgMur(),this.mur3.getX(),this.mur3.getY(),null);
+		//g2.drawImage(this.mur4.getImgMur(),this.mur4.getX(),this.mur4.getY(),null);
+		//g2.drawImage(this.mur5.getImgMur(),this.mur5.getX(),this.mur5.getY(),null);
+		//g2.drawImage(this.mur6.getImgMur(),this.mur6.getX(),this.mur6.getY(),null);
+		//g2.drawImage(this.mur7.getImgMur(),this.mur7.getX(),this.mur7.getY(),null);
+		//g2.drawImage(this.mur8.getImgMur(),this.mur8.getX(),this.mur8.getY(),null);
+		//g2.drawImage(this.mur9.getImgMur(),this.mur9.getX(),this.mur9.getY(),null);
+		//g2.drawImage(this.mur10.getImgMur(),this.mur10.getX(),this.mur10.getY(),null);
+		//g2.drawImage(this.mur11.getImgMur(),this.mur11.getX(),this.mur11.getY(),null);
+		//g2.drawImage(this.mur12.getImgMur(),this.mur12.getX(),this.mur12.getY(),null);
+		//g2.drawImage(this.mur13.getImgMur(),this.mur13.getX(),this.mur13.getY(),null);
+		//g2.drawImage(this.mur14.getImgMur(),this.mur14.getX(),this.mur14.getY(),null);
+		//g2.drawImage(this.mur15.getImgMur(),this.mur15.getX(),this.mur15.getY(),null);
+		//g2.drawImage(this.mur16.getImgMur(),this.mur16.getX(),this.mur16.getY(),null);
+		//g2.drawImage(this.mur17.getImgMur(),this.mur17.getX(),this.mur17.getY(),null);
+		//g2.drawImage(this.mur18.getImgMur(),this.mur18.getX(),this.mur18.getY(),null);
 	
 		//affichage des coeurs
 		g2.drawImage(this.p1.getImgpotion(),this.p1.getX(),this.p1.getY(),null);
@@ -272,7 +223,7 @@ public class Donjon extends JPanel {
 		for(int x=0; x<=(getXScene()-50);x=x+50) {
 			for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
 				if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
-					g2.drawImage(this.mur.getImgMur(),x,y,null);
+					//g2.drawImage(this.mur.getImgMur(),x,y,null);
 			}	
 		}}
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
