@@ -65,7 +65,7 @@ public class Donjon extends JPanel {
 		super();
 		this.xFond1 = -50;
 		this.persoX =xScene-100;
-		this.persoY = yScene-110;
+		this.persoY = yScene-150;
 		this.xScene = xScene;
 		this.yScene = yScene;
 		

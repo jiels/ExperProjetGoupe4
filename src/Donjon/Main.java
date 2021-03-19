@@ -3,12 +3,13 @@ package Donjon;
 import javax.swing.JFrame;
 import java.util.Scanner;
 
-public class Main {
+public class Main extends Thread{
 	//***INITIALISATION***//
 	public static Donjon scene;
 
-	public static void main(String[] args) {
-		
+	public static void main() {}
+	
+	public void run() {
 		//***CREATION DE LA FENETRE DE JEUX***//
 		JFrame frame = new JFrame("the dungeon of hope");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//quand on clique sur la croix rouge en haut de la frame on ferme le programme

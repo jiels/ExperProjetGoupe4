@@ -138,8 +138,8 @@ public class Personnage {
 	 
 	 public void ramaserPotion(Objet odjet) {
 		 if(this.collision(odjet)) {
-			 odjet.setX(0);
-			 odjet.setY(0);
+			 odjet.setX(-50);
+			 odjet.setY(-50);
 			 setPotion(1);
 		 }
 	 }
