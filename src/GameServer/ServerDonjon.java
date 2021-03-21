@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import Donjon.CommandException;
 import Donjon.Main;
 
 
@@ -38,7 +39,12 @@ public class ServerDonjon extends Thread {
 			map.start();
 			while(true) {
 				String commande = in.readLine();
-				
+				if(commande.length()==4) {
+					
+				}
+				else {
+					throw new CommandException("commande inconnue");
+				}
 			}
 			
 		} catch (Exception e) {
