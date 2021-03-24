@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -36,14 +37,24 @@ public class Donjon extends JPanel {
 	private void addMur(Mur m) {
 		listMur.add(m);
 	}
+	//private void addNbMur(int nbmur) { // Alea des murs
+	//for(int i=0; i<nbmur; i++) {
+	//	addMur(new Mur(0,0));
+	//	} 
+	//}
 	private void addNbMur(int nbmur) { // Alea des murs
 	for(int i=0; i<nbmur; i++) {
-		addMur(new Mur(0,0));
+		x=genererInt(0,xScene-115/50);
+		y=genererInt(0,yScene-135/50);
+		if(x!=xScene&&y!=yScene&&listMur.contains(null)==false) {// trouver comment repérer si listmur contient 
+		addMur(new Mur(x,y));									// un mur aux coord x et y 
+		}
 		} 
 	}
+	
 	public Jouer joueur;
 	//initialisation mur//
-
+	public Mur murExte;
 	
 	/////////////////
 	//initialisation coeur//
@@ -146,6 +157,13 @@ public class Donjon extends JPanel {
 		}
 	}
 	
+	int genererInt(int borneInf, int borneSup){
+		   Random random = new Random();
+		   int nb;
+		   nb = borneInf+random.nextInt(borneSup-borneInf);
+		   return nb;
+		}
+
 	// Creation solide mur 
 	
 
@@ -223,7 +241,7 @@ public class Donjon extends JPanel {
 		for(int x=0; x<=(getXScene()-50);x=x+50) {
 			for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
 				if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
-					//g2.drawImage(this.mur.getImgMur(),x,y,null);
+					g2.drawImage(this.murExte.getImgMur(),x,y,null);
 			}	
 		}}
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
