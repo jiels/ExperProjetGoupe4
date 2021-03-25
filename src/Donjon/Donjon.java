@@ -34,6 +34,9 @@ public class Donjon extends JPanel {
 	
 	private int nbMur;
 	
+	private int sortieX;
+	private int sortieY;
+	
 	private void addMur(Mur m) {
 		listMur.add(m);
 	}
@@ -44,10 +47,10 @@ public class Donjon extends JPanel {
 	//}
 	private void addNbMur(int nbmur) { // Alea des murs
 	for(int i=0; i<nbmur; i++) {
-		x=genererInt(0,xScene-115/50);
-		y=genererInt(0,yScene-135/50);
-		if(x!=xScene&&y!=yScene&&listMur.contains(null)==false) {// trouver comment repérer si listmur contient 
-		addMur(new Mur(x,y));									// un mur aux coord x et y 
+		x=50*genererInt(0,(xScene-115)/50);
+		y=50*genererInt(0,(yScene-135)/50);
+		if(x!=xScene&&y!=yScene&&listMur.contains(x=getX())==false) {// trouver comment repérer si listmur contient 
+		addMur(new Mur(x,y));									      // un mur aux coord x et y 
 		}
 		} 
 	}
@@ -79,6 +82,8 @@ public class Donjon extends JPanel {
 		this.persoY = yScene-150;
 		this.xScene = xScene;
 		this.yScene = yScene;
+		this.sortieX = 50*genererInt((xScene-115)/100,xScene-115/50); // où doit-être la sortie ? random ? si random : = 50*genererInt(0,xScene-115/50);
+		this.sortieY = 50*genererInt((yScene-135)/100,(yScene-135)/50); // si je la veux en haut je peux choisir de ne prendre que entre xscene/2 et xscene
 		
 		//Fond
 		solFond = new ImageIcon("src/images/sol.jpg");
