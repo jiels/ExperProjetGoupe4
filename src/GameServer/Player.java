@@ -2,6 +2,7 @@ package GameServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Serializable;
@@ -14,14 +15,17 @@ import Donjon.CommandException;
 
 public class Player implements Serializable {
 private static final long serialVersionUID = -987725587799656168L;
+private String id;
 private PrintStream out = null;
 private BufferedReader in =null;
+private Scanner sc = new Scanner(System.in);
 private Socket socket;
 
 
 //***CONSTRUCTEUR***//
 public Player() {
     try {
+    	id = sc.next();
         socket = new Socket("127.0.0.1", 6112);
         out= new PrintStream( socket.getOutputStream() );
         in= new BufferedReader(new InputStreamReader(socket.getInputStream()));

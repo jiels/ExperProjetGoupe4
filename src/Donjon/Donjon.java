@@ -25,6 +25,8 @@ public class Donjon extends JPanel {
 	private Image  sol;
 	private int xFond1;		
 	
+	private int xAlea;
+	private int yAlea;
 	private int persoX;
 	private int x;
 	private int persoY;
@@ -37,23 +39,7 @@ public class Donjon extends JPanel {
 	private int sortieX;
 	private int sortieY;
 	
-	private void addMur(Mur m) {
-		listMur.add(m);
-	}
-	//private void addNbMur(int nbmur) { // Alea des murs
-	//for(int i=0; i<nbmur; i++) {
-	//	addMur(new Mur(0,0));
-	//	} 
-	//}
-	/*private void addNbMur(int nbmur) { // Alea des murs
-	for(int i=0; i<nbmur; i++) {
-		x=50*genererInt(0,(xScene-115)/50);
-		y=50*genererInt(0,(yScene-135)/50);
-		if(x!=xScene&&y!=yScene&&listMur.contains(x=getX())==false) {// trouver comment repérer si listmur contient 
-		addMur(new Mur(x,y));									      // un mur aux coord x et y 
-		}
-		} 
-	}*/
+	
 	
 	public Jouer joueur;
 	//initialisation mur//
@@ -77,14 +63,17 @@ public class Donjon extends JPanel {
 //***CONSTRUCTEUR***//
 	public Donjon(int xScene, int yScene) {
 		super();
+		System.out.println(this.persoX+""+this.persoY);
 		this.xFond1 = -50;
 		this.persoX =xScene-100;
 		this.persoY = yScene-150;
+		this.xAlea= xScene;
+		this.yAlea= yScene;
 		this.xScene = xScene;
 		this.yScene = yScene;
+		System.out.println(this.persoX+""+this.persoY);
 		this.sortieX = 50*genererInt((xScene-115)/100,xScene-115/50); // où doit-être la sortie ? random ? si random : = 50*genererInt(0,xScene-115/50);
 		this.sortieY = 50*genererInt((yScene-135)/100,(yScene-135)/50); // si je la veux en haut je peux choisir de ne prendre que entre xscene/2 et xscene
-		
 		//Fond
 		solFond = new ImageIcon("src/images/sol.jpg");
 		this.sol = this.solFond.getImage();
@@ -93,11 +82,14 @@ public class Donjon extends JPanel {
 		joueur = new Jouer(this.persoX,this.persoY);
 		
 		//Placement Murs
-		/*nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  // Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
-		addNbMur(nbMur);*/
+		murExte = new Mur(0, 0);
+		
+		
 		
 		
 		//addMur(Mur )
+		nbMur=(xAlea)*(yAlea)/5 ;// Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
+		addNbMur(nbMur);
 
 		//Placement Coeur
 		p1 =new PotionVie(750, 100);
@@ -120,6 +112,27 @@ public class Donjon extends JPanel {
 	
 	
 //***METHODES***//
+	private void addMur(Mur m) {
+		listMur.add(m);
+	}
+	//private void addNbMur(int nbmur) { // Alea des murs
+	//for(int i=0; i<nbmur; i++) {
+	//	addMur(new Mur(0,0));
+	//	} 
+	//}
+	private void addNbMur(int nbmur) { // Alea des murs
+		int x;
+		int y;
+	for(int i=0; i<nbmur; i++) {
+		x=50*genererInt(0,(xAlea-115)/50);
+		y=50*genererInt(0,(yAlea-135)/50);
+		Mur a = new Mur(x,y);
+		if(x!=xScene&&y!=yScene&&listMur.contains(a)==false) {// trouver comment repérer si listmur contient 
+		addMur(a);									      // un mur aux coord x et y 
+		}
+		} 
+	}
+	
 	public void deplacementPersoX() {
 		if(this.persoX==xScene-100) {
 			this.persoX = this.persoX -4;
@@ -162,7 +175,7 @@ public class Donjon extends JPanel {
 		}
 	}
 	
-	int genererInt(int borneInf, int borneSup){
+	public int genererInt(int borneInf, int borneSup){
 		   Random random = new Random();
 		   int nb;
 		   nb = borneInf+random.nextInt(borneSup-borneInf);
@@ -181,7 +194,7 @@ public class Donjon extends JPanel {
 		
 		
 		//Collision solide
-		
+		System.out.println(this.persoX+""+this.persoY);
 		
 		// Ramasse coeur
 		joueur.ramaserPotion(p1);
@@ -204,6 +217,10 @@ public class Donjon extends JPanel {
 		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
 		
 		//affichage des murs
+		
+		
+		//System.out.println(xAlea,"",yAlea);
+		
 		//g2.drawImage(this.mur.getImgMur(),this.mur.getX(),this.mur.getY(),null);
 		//g2.drawImage(this.mur2.getImgMur(),this.mur2.getX(),this.mur2.getY(),null);
 		//g2.drawImage(this.mur3.getImgMur(),this.mur3.getX(),this.mur3.getY(),null);
@@ -243,12 +260,12 @@ public class Donjon extends JPanel {
 					//if(x==0||(x>=(getXScene()-50)&&x<(getXScene())||y==0||(y>=(getYScene()-50)&&y<(getYScene())))) {
 					//g2.drawImage(this.mur.getImgMur(),x,y,null);
 					
-		/*for(int x=0; x<=(getXScene()-50);x=x+50) {
+		for(int x=0; x<=(getXScene()-50);x=x+50) {
 			for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
 				if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
 					g2.drawImage(this.murExte.getImgMur(),x,y,null);
 			}	
-		}}*/
+		}}
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
 	}
 //540 = 10 et 550 = 11

@@ -1,6 +1,6 @@
 package Objet;
 
-public class Objet {
+public class Objet implements Comparable<Objet> {
 	//***INITIALISATION***//
 	private int largeur , hauteur;//Dimontion de l'objet
 	private int x ,y ;
@@ -48,6 +48,17 @@ public class Objet {
 	}
 	public void setY(int y) {
 		this.y = y;}
+
+	
+	
+	public int compareTo(Objet o) {
+		
+		if (this.x==o.x&&this.y==o.y) {
+			return 0;
+		}
+
+        return 1;
+	}
 	
 	
 	
