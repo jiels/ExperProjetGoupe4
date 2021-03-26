@@ -45,7 +45,7 @@ public class Donjon extends JPanel {
 	//	addMur(new Mur(0,0));
 	//	} 
 	//}
-	private void addNbMur(int nbmur) { // Alea des murs
+	/*private void addNbMur(int nbmur) { // Alea des murs
 	for(int i=0; i<nbmur; i++) {
 		x=50*genererInt(0,(xScene-115)/50);
 		y=50*genererInt(0,(yScene-135)/50);
@@ -53,7 +53,7 @@ public class Donjon extends JPanel {
 		addMur(new Mur(x,y));									      // un mur aux coord x et y 
 		}
 		} 
-	}
+	}*/
 	
 	public Jouer joueur;
 	//initialisation mur//
@@ -93,8 +93,8 @@ public class Donjon extends JPanel {
 		joueur = new Jouer(this.persoX,this.persoY);
 		
 		//Placement Murs
-		nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  // Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
-		addNbMur(nbMur);
+		/*nbMur=((xScene-115)/50)*((yScene-135)/50)/5 ;  // Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
+		addNbMur(nbMur);*/
 		
 		
 		//addMur(Mur )
@@ -243,12 +243,12 @@ public class Donjon extends JPanel {
 					//if(x==0||(x>=(getXScene()-50)&&x<(getXScene())||y==0||(y>=(getYScene()-50)&&y<(getYScene())))) {
 					//g2.drawImage(this.mur.getImgMur(),x,y,null);
 					
-		for(int x=0; x<=(getXScene()-50);x=x+50) {
+		/*for(int x=0; x<=(getXScene()-50);x=x+50) {
 			for(int y = 0 ; y<=(getYScene()-50);y=y+50) {
 				if(x==0||(x>=(getXScene()-100)&&x<(getXScene()-50)||y==0||(y>=(getYScene()-100)&&y<(getYScene()-50)))) {
 					g2.drawImage(this.murExte.getImgMur(),x,y,null);
 			}	
-		}}
+		}}*/
 			//System.out.println("xScene :"+getXScene()+"yScene :"+getYScene());
 	}
 //540 = 10 et 550 = 11
