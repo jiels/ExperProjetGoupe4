@@ -7,7 +7,7 @@ public class Main extends Thread{
 	//***INITIALISATION***//
 	public static Donjon scene;
 
-	public static void main() {}
+	public Main() {}
 	
 	public void run() {
 		//***CREATION DE LA FENETRE DE JEUX***//
