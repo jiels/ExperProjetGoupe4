@@ -1,64 +1,43 @@
 package GameServer;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
-import Donjon.CommandException;
 import Donjon.Main;
 
 
 public class ServerDonjon extends Thread {
-	private Socket socket;
-    private PrintStream out;
-    private BufferedReader in;
+	private Socket client;
+	private Server server;
     private Main map;
-    
-    
+    private Scanner inputStream;
+    private PrintWriter outputStream;
     
 //***CONTRUCTEUR***//
-	public ServerDonjon() {
-		try {
-            this.socket=socket;
-            this.map = new Main();
-            out = new PrintStream( socket.getOutputStream() );
-            in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public ServerDonjon(Socket client,Server server) {
+		this.client=client;
+		this.server = server;
 		
 	}
-//***METHODES***//
-	@SuppressWarnings("static-access")
-	public void run() {
-		try {
-			map.start();
-			while(true) {
-				String commande = in.readLine();
-				if(commande.length()==4) {
-					
-				}
-				else {
-					throw new CommandException("commande inconnue");
-				}
+	
+
+public void run() {
+	try {
+		inputStream = new Scanner(client.getInputStream());
+		while(true) {
+			String commande = inputStream.toString();
+			this.map.getScene().setComd(commande);
+			outputStream.print(map.info());
 			}
-			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
-		
-		
+			}
 	}
-	
-	
 
-
-	
-	
-	
 }

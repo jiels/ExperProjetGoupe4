@@ -6,16 +6,24 @@ public class SceenRefresh implements Runnable {
 	 * pour créé un effet de mouvement
 	 */
 	private final int refrehPause = 3; //Le temps d'attente entre deux rafraichisement
+	private Donjon sc;
 
+	public SceenRefresh(Donjon donjon) {
+		this.sc=donjon;
+	}
 	@Override
 	public void run() {
 		while(true) {
-			Main.scene.repaint();
+			this.getSc().repaint();
 			try {
 				Thread.sleep(refrehPause);
 			} catch (InterruptedException e) {}
 		}
 		
 	}
+	public Donjon getSc() {
+		return sc;
+	}
+	
 
 }

@@ -18,6 +18,18 @@ public class Jouer extends Personnage{
 	this.imgPerso = this.icoPerso.getImage();
 		
 	}
+	public void machX(int x) {
+		int X = getX()+x;
+		setX(X);
+		
+		
+	}
+	public void machY(int y) {
+		int Y = getY()+y;
+		setX(Y);
+		
+		
+	}
 
 
 	//***GETTER & SETTER***//
