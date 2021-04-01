@@ -5,7 +5,6 @@ import java.io.IOException;
 //import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -13,10 +12,10 @@ import Donjon.CommandException;
 
 
 
-public class Player implements Runnable  {
+public class Player{
 private String id;
-private Scanner inputStream;
-private PrintWriter outputStream;
+private PrintStream out = null;
+private BufferedReader in =null;
 private Socket socket;
 
 
@@ -25,16 +24,25 @@ private Socket socket;
 public Player(){
 	@SuppressWarnings("resource")
 	Scanner sc = new Scanner(System.in);
-	//PSEUDO DU JOUEUR
-		System.out.print("Veiller entre un Pseudo: ");
-		id = sc.next();
-	//CONNEXION AU SERVER 
+	System.out.print("Veiller entre un Pseudo: ");
+	id = sc.next();
 	try {
 		System.out.println("connexion au server........");
 		socket = new Socket("127.0.0.1", 6112);
-		} catch (IOException e) {
-			System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
-			}
+		in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+		out = new PrintStream( socket.getOutputStream() );
+		
+		System.out.print("Saisir la taille de la map en largeur (entre 10 et 20) : ");
+		String x=sc.next();
+		System.out.print("Saisir la taille de la map en hauteur (entre 10 et 14) :");
+		String y = sc.next();
+		String xy =x+"|"+y;
+		out.println(xy);;
+	} catch (IOException e) {
+		System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
+		System.exit(1);
+	}
+	
     
 }
 
@@ -93,31 +101,33 @@ public void run() {
 	@SuppressWarnings("resource")
 	Scanner t = new Scanner(System.in);
 	try {
-		inputStream = new Scanner(socket.getInputStream());
-		outputStream = new PrintWriter(socket.getOutputStream());
-	} catch (IOException e1) {e1.printStackTrace();System.err.println("inputStream ou outputStream erreur");}
-
-	while(true) {;
+	while(true) {
+		System.out.println("Veillez entrer vos action :");
+		String commande = t.next();
 		try {
-			System.out.println("Veillez entrer vos action :");
-			String commande = t.next();
-			String commande2="";
-			commande2=maj(commande);
+			String commande2=maj(commande);
 			if(commande(commande2)) {
-				outputStream.println(commande2);
-				
-			}
-			System.out.println(id+":"+ inputStream.nextLine());
-			
-		} catch (CommandException e) {
-			e.getMessage();
-			}
-	}
-	
+				System.out.println("jjajaj");
+				out.print(commande2);}
+		}catch (CommandException e) {
+			e.getMessage();}
+		
+		
+		String reponse;
+		try {
+			System.out.println(11);
+			reponse = in.readLine();
+			System.out.println(this.id+": "+reponse);
+		}catch (IOException e) {
+			// TODO: handle exception
+		}
+		
+		}
+	}catch (Exception e1) {e1.getMessage();System.err.println("La connexion est perdue !");}
 }
-	
 public static void main(String argv[]) {
-    new Player().run();
+    Player c =new Player();
+    c.run();
 }	
 	
 

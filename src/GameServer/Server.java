@@ -1,7 +1,8 @@
 package GameServer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InterruptedIOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -12,9 +13,10 @@ import java.util.ArrayList;
 
 
 public class Server implements Runnable {
-	 public static final int PORT=6112;
-	 private ServerSocket serverSocket;
-	 private ArrayList<Socket> clientList;
+	public static final int PORT=6112;
+	private ServerSocket serverSocket;
+	private ArrayList<Socket> clientList;
+	private Socket client;
 
 	public Server() {
         try {
@@ -30,26 +32,36 @@ public class Server implements Runnable {
 	
 	public void run() {
 		System.out.println("en attante de clients ...");
-		while(true) {
 			//ATTENT DU CLIENT
-			Socket client;
+			Socket client = null;
 			try {
 			client = serverSocket.accept();
+			this.client = client;
 			clientList.add(client);
-			if(clientList.contains(client));{
-				System.out.println("Nouveux client accepter..." + client.getRemoteSocketAddress());
+			BufferedReader in = new BufferedReader( new InputStreamReader( client.getInputStream() ) );
+
+			if(!clientList.contains(client));{
+				System.out.println("Nouveux client accepter...");
 				System.out.println("Nombre d'utilisateur: " + clientList.size());
-				ServerDonjon donjon = new ServerDonjon(client,this);
-				donjon.run();}
+				String srt= in.readLine();
+				System.out.println(srt);
+				int x = Integer.valueOf(String.valueOf(srt.charAt(0))+""+String.valueOf(srt.charAt(1)));
+				int y = Integer.valueOf(String.valueOf(srt.charAt(3))+""+String.valueOf(srt.charAt(4)));
+				ServerDonjon donjon = new ServerDonjon(client,x,y);
+				donjon.run();
+				}
 			}catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 		
 	}
 	
 	
+	public Socket getClient() {
+		return client;
+	}
+
 	public static void main(String argv[]) throws UnknownHostException, IOException {
         new Server().run();
     }

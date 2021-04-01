@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -44,7 +43,7 @@ public class Donjon extends JPanel {
 	
 	
 	private Jouer joueur;
-	private String comd;
+
 	
 	//initialisation mur//
 	private Mur murExte;
@@ -67,7 +66,6 @@ public class Donjon extends JPanel {
 //***CONSTRUCTEUR***//
 	public Donjon(int xScene, int yScene) {
 		super();
-		this.comd = "";
 		this.xFond1 = -50;
 		this.persoX = xScene-115;
 		this.persoY = yScene-125;
@@ -246,9 +244,7 @@ public class Donjon extends JPanel {
 		//AFFICHAGE DES MURS
 		
 				int m = 0;
-				
 				g2.drawImage(this.murExte.getImgMur(),50,50,null);
-				
 				for (int i = 0; i < getListMur().size(); i++) {
 				      m++;
 				      
@@ -414,10 +410,6 @@ public class Donjon extends JPanel {
 
 
 
-
-	public void setComd(String comd) {
-		this.comd = comd;
-	}
 	
 
 
