@@ -60,14 +60,14 @@ public String maj(String a) throws CommandException {
 			e+="V";
 		}
 		else {
-			throw new CommandException("Des commande inconnue on été entrer ");
+			e+=a.charAt(i);
 		}
 		
 	}
 	return e;
 }
 
-public boolean commande(String a) throws CommandException {
+public boolean commande(String a){
 	boolean correct = false;
 	if(a.length()==4) {
 		for (int i=0;i<a.length();i++) {
@@ -75,17 +75,10 @@ public boolean commande(String a) throws CommandException {
 				correct = true;
 			}
 			else {
-				correct = false;
-				throw new CommandException("L'une des de vos action na pas été reconue");}
+				correct = false;}
 			}
 	}
-	else {
-		throw new CommandException("Le nombre d'ation prévu est inh correcte veillez entre 4 futures action");
-		}
-	return correct;
-		
-	
-	
+	return correct;	
 }
 
 public void run() {
@@ -108,12 +101,33 @@ public void run() {
 	try {
 		String a = in.readLine() ;
 		System.err.println("\n"+a);
+		System.out.println("\nVoisi comment se déroule la partie:\n-vous enter 4 action en un seul fois \n-Puis apuyer sur entre et les action entre s\'exécute");
+		System.err.println("votre but est de trouver la sortie");
 	} catch (IOException e) {e.printStackTrace();}
 	
+	try {
+		while(true) {
+			System.out.print("\nVeillez entrer 4 action :");
+			String cmd = sc.next();
+			String maj =maj(cmd);
+			while(!commande(maj)) {
+				System.err.println("Trop d\'action commande ou inconnu réessayer!");
+				cmd = sc.next();
+				maj =maj(cmd);
+				}
+			if(commande(maj)) {
+				out.println(maj);
+				out.flush();
+			}
+			String info = in.readLine();
+			System.out.println(id+": "+info);
+		}
+	} catch (CommandException|IOException e) {e.getMessage();}
 	
 
 	
 }
+
 
 public static void main(String argv[]) {
    new Player().run();

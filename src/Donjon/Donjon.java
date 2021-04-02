@@ -108,8 +108,8 @@ public class Donjon extends JPanel {
 		this.requestFocusInWindow();*/
 		
 		
-		Thread ecranRefresh = new Thread(new SceenRefresh(this));
-		ecranRefresh.start();}
+		/*Thread ecranRefresh = new Thread(new SceenRefresh(this));
+		ecranRefresh.start();*/}
 	 
 	
 	
@@ -319,6 +319,9 @@ public class Donjon extends JPanel {
 	
 	
 //***GETTER & SETTER***//
+	public String info() {
+		String str = "Vie:"+this.getJoueur().getVie()+" Potion:"+this.getJoueur().getPotion();
+		return str;}
 	
 	public int getX() {
 		return x;

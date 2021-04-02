@@ -145,7 +145,7 @@ public class Personnage {
 	 }
 	 
 	 public void usePotion() {
-		 if(getVie()!=0) {
+		 if(getVie()!=5&&getPotion()!=0) {
 			 setPotion(-1);
 		 }
 	 }
