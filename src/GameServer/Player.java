@@ -2,9 +2,9 @@ package GameServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-//import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -13,8 +13,9 @@ import Donjon.CommandException;
 
 
 public class Player{
+private Scanner sc;
 private String id;
-private PrintStream out = null;
+private PrintWriter out = null;
 private BufferedReader in =null;
 private Socket socket;
 
@@ -22,29 +23,22 @@ private Socket socket;
 
 //***CONSTRUCTEUR***//
 public Player(){
-	@SuppressWarnings("resource")
-	Scanner sc = new Scanner(System.in);
+	sc = new Scanner(System.in);
 	System.out.print("Veiller entre un Pseudo: ");
 	id = sc.next();
 	try {
 		System.out.println("connexion au server........");
 		socket = new Socket("127.0.0.1", 6112);
 		in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
-		out = new PrintStream( socket.getOutputStream() );
-		
-		System.out.print("Saisir la taille de la map en largeur (entre 10 et 20) : ");
-		String x=sc.next();
-		System.out.print("Saisir la taille de la map en hauteur (entre 10 et 14) :");
-		String y = sc.next();
-		String xy =x+"|"+y;
-		out.println(xy);;
+		out= new PrintWriter(socket.getOutputStream());
+		System.out.println("\nBienvenue a toi explorateur!");
 	} catch (IOException e) {
 		System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
-		System.exit(1);
-	}
-	
+		System.exit(1);}
     
 }
+//***GETTER&SETTE***//
+
 
 //***METHODE***//
 public String maj(String a) throws CommandException {
@@ -82,14 +76,11 @@ public boolean commande(String a) throws CommandException {
 			}
 			else {
 				correct = false;
-				throw new CommandException("L'une des de vos action na pas été reconue");
-				
+				throw new CommandException("L'une des de vos action na pas été reconue");}
 			}
-			
-		}
 	}
 	else {
-			throw new CommandException("Le nombre d'ation prévu est inh correcte veillez entre 4 futures action");
+		throw new CommandException("Le nombre d'ation prévu est inh correcte veillez entre 4 futures action");
 		}
 	return correct;
 		
@@ -98,36 +89,35 @@ public boolean commande(String a) throws CommandException {
 }
 
 public void run() {
-	@SuppressWarnings("resource")
-	Scanner t = new Scanner(System.in);
 	try {
-	while(true) {
-		System.out.println("Veillez entrer vos action :");
-		String commande = t.next();
-		try {
-			String commande2=maj(commande);
-			if(commande(commande2)) {
-				System.out.println("jjajaj");
-				out.print(commande2);}
-		}catch (CommandException e) {
-			e.getMessage();}
-		
-		
-		String reponse;
-		try {
-			System.out.println(11);
-			reponse = in.readLine();
-			System.out.println(this.id+": "+reponse);
-		}catch (IOException e) {
-			// TODO: handle exception
+		System.out.print("Tout d'abord saisi la taille de la map en largeur (un entier entre 10 et 20) : ");
+		String x=sc.next();
+		if(Integer.valueOf(x)>=10&&Integer.valueOf(x)<=20) {
+			out.println(x);
+			out.flush();
 		}
+		System.out.print("Ensuite saisi la taille de la map en hauteur (un entier entre  10 et 14) :");
+		String y = sc.next();
+		if(Integer.valueOf(y)>=10&&Integer.valueOf(y)<=20) {
+			out.println(y);
+			out.flush();
+			}
 		
-		}
-	}catch (Exception e1) {e1.getMessage();System.err.println("La connexion est perdue !");}
+		}catch (Exception e) {e.getStackTrace();}
+	
+	try {
+		String a = in.readLine() ;
+		System.err.println("\n"+a);
+	} catch (IOException e) {e.printStackTrace();}
+	
+	
+
+	
 }
+
 public static void main(String argv[]) {
-    Player c =new Player();
-    c.run();
+   new Player().run();
+
 }	
 	
 

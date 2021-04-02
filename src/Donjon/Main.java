@@ -34,17 +34,17 @@ public class Main{
 		
 		
 		
-		
-		public String info() {
-			String str = "Vie:"+this.getScene().getJoueur().getVie()+" Potion:"+this.getScene().getJoueur().getPotion();
-			return str;
+	public String info() {
+		String str = "Vie:"+this.scene.getJoueur().getVie()+" Potion:"+this.scene.getJoueur().getPotion();
+		return str;
 			
 		}
+	public void clavier(String a) {
+		this.scene.ServerClavier(a);
+	}
 	
 	
 	
-	
-
 	public Donjon getScene() {
 		return scene;
 	}

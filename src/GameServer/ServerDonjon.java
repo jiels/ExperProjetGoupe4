@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -12,47 +13,50 @@ import Donjon.Main;
 
 
 public class ServerDonjon extends Thread {
-	Scanner clavier = new Scanner(System.in);
-	private Socket client;
+    private Socket socket;
+    private PrintStream out;
+    private BufferedReader in;
     private Main map;
     
 //***CONTRUCTEUR***//
-	public ServerDonjon(Socket client,int x,int y) throws IOException  {
-			 this.client= client;
-			 int a=50*(x+2)+15;
-			 int b=50*(y+2)+35;
-			 map = new Main(a,b);
+	public ServerDonjon(Socket socket) {
+		try {
+			 this.socket= socket;
+			 out = new PrintStream( socket.getOutputStream() );
+	         in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+			
+		}catch (Exception e) {e.printStackTrace();}
 	}
-		public void run() {
-			try {
-				String cd;
-				String rp;
-				while(true) {
-					try {
-					cd = (new BufferedReader( new InputStreamReader(this.client.getInputStream() ) )).readLine();
-					getMap().getScene().ServerClavier(cd);
-					}catch (IOException e) {
-						e.getStackTrace();
-					}
-					
-					
-					try {
-					rp = getMap().info();
-					(new PrintStream( this.client.getOutputStream() )).println(rp);}
-					catch (Exception e) {
-						e.getStackTrace();
-					}
+	
+	
+	
+	public void run() {
+		try {
+			String a = in.readLine();
+			int x = Integer.valueOf(a);
+			if(x>=10 && x<=20) {
+				String b=in.readLine();
+				int y = Integer.valueOf(b);
+				if(y>=10&&y<=14) {
+					int rx=50*(x+2)+15;
+					int ry=50*(y+2)+35;
+					this.map= new Main(rx,ry);
 				}
-				
-			} catch (Exception e) {
-				// TODO: handle exception
 			}
+		} catch (IOException  e) {e.printStackTrace();}
+		
+		try {
+			out.println("commandes: z=devant s=derrière q=gauche d=droit v= utiliser potion");
+		} catch (Exception e) {e.getStackTrace();}
+		
+			
 			
 		}
 
+		
 
 	public Main getMap() {
-		return map;
+		return this.map;
 	}
 
 	
