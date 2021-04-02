@@ -159,20 +159,20 @@ public class Donjon extends JPanel {
 		}
 	}
 	
-	public void solide(Objet odjet) {
+	public void solide(Objet objet) {
 		
-		if(joueur.collision(odjet)) {
+		if(joueur.collision(objet)) {
 			if(joueur.isVersDroite()) {
-				this.persoX=this.persoX-1;
+				this.persoX=objet.getX()-50;
 			}
 			if(joueur.isVersGauche()) {
-				this.persoX=this.persoX+1;
+				this.persoX=objet.getX()+50;
 			}
 			if(joueur.isVersH()) {
-				this.persoY=this.persoY+1;
+				this.persoY=objet.getX()+50;
 			}
 			if(joueur.isVersB()) {
-				this.persoY=this.persoY-1;
+				this.persoY=objet.getX()-50;
 			}
 		}
 	}

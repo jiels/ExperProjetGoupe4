@@ -121,7 +121,7 @@ public void run() {
 			}
 			String info = in.readLine();
 			System.out.println(id+": "+info);
-		}
+			}
 	} catch (CommandException|IOException e) {e.getMessage();}
 	
 
