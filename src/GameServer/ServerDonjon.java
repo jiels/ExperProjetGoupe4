@@ -3,32 +3,33 @@ package GameServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
+import javax.swing.text.DefaultEditorKit.CopyAction;
 import Donjon.Donjon;
-import Donjon.Main;
+
 
 
 public class ServerDonjon extends Thread {
-    private Socket socket;
-    private PrintStream out;
-    private BufferedReader in;
-	private Donjon scene;
+    private ArrayList<Socket> jouers;
+    private PrintWriter out = null;
+    private BufferedReader in =null;
+	private Donjon scene1;
+	private Donjon scene2;
 	private int x;
 	private int y;
     
 //***CONTRUCTEUR***//
-	public ServerDonjon(Socket socket) {
+	public ServerDonjon() {
 		try {
-			 this.socket= socket;
-			 out = new PrintStream( socket.getOutputStream() );
-	         in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
+			 this.jouers=new ArrayList<Socket>();
+			 this.x = largeur();
+			 this.y =hauteur();
+			 
 			
 		}catch (Exception e) {e.printStackTrace();}
 	}
@@ -36,58 +37,60 @@ public class ServerDonjon extends Thread {
 	
 	
 	public void run() {
+		int rx=50*(this.x+2)+15;
+		int ry=50*(this.y+2)+35;
+		for(int i =0;i<jouers.size();i++) {
 		try {
-			String a = in.readLine();
-			x = Integer.valueOf(a);
-			if(x>=10 && x<=20) {
-				String b=in.readLine();
-				y = Integer.valueOf(b);
-				if(y>=10&&y<=14) {
-					int rx=50*(x+2)+15;
-					int ry=50*(y+2)+35;
-					JFrame frame = new JFrame("the dungeon of hope");
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.setSize(rx,ry);
-					frame.setLocationRelativeTo(null);
-					frame.setResizable(false);
-					frame.setAlwaysOnTop(true);
-					scene = new Donjon(rx,ry);
-					frame.setContentPane(scene);
-					frame.setVisible(true);
-				}
-			}
-		} catch (IOException  e) {e.printStackTrace();}
-		
+			out = new PrintWriter(jouers.get(i).getOutputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
-			out.println("commandes: z=devant s=derrière q=gauche d=droit v= utiliser potion");
-		} catch (Exception e) {e.getStackTrace();}
-		
+			out.print(rx);
+			out.flush();
+		} catch (Exception e) {e.printStackTrace();}
 		try {
-			while(true) {
-				String cmd = in.readLine();
-				if(!cmd.isEmpty()) {
-					getMap().ServerClavier(cmd);
-				}
-				out.println(getMap().info());
-				out.flush();
-			}
+			out.print(ry);
+			out.flush();
+		} catch (Exception e) {e.printStackTrace();}
+		}
+		scene1 = new Donjon(rx,ry);
+		while(true) {
 			
-		} catch (Exception e) {}
-		
-		
-		
-		
-		
-		
-			
+		}
 	}
 
 		
 
 	public Donjon getMap() {
-		return this.scene;
+		return this.scene1;
 	}
 
+	public Integer largeur() {
+		ArrayList<Integer> xx = new ArrayList<Integer>();
+		for(int i=10;i<=20;i++) {
+			xx.add(i);
+		}
+		int x =(int) (Math.random()*xx.size());
+		return xx.get(x);
+	}
 	
+	public Integer hauteur() {
+		ArrayList<Integer> yy = new ArrayList<Integer>();
+		for(int i=10;i<=14;i++) {
+			yy.add(i);
+		}
+		int y =(int) (Math.random()*yy.size());
+		return yy.get(y);
+	}
+
+	public void newPlayer(Socket s) {
+		this.jouers.add(s);
+	}
+	
+	public Integer nJouers() {
+		return this.jouers.size();
+	}
 	
 }

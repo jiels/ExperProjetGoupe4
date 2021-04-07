@@ -126,7 +126,7 @@ public class Donjon extends JPanel {
 		x=50*genererInt(1,(xAlea-115)/50);
 		y=50*genererInt(1,(yAlea-135)/50);
 		Mur a = new Mur(x,y);
-		if(x!=persoX&&y!=persoY&&listMur.contains(a)==false) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+		if(x!=persoX&&y!=persoY&&!listMur.contains(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 		addMur(a);												// pour l'instant pas grave
 		}
 		else {
