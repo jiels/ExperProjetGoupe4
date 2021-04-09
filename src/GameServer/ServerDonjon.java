@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.text.DefaultEditorKit.CopyAction;
 import Donjon.Donjon;
+import Donjon.Position;
 
 
 
@@ -18,8 +19,10 @@ public class ServerDonjon extends Thread {
     private ArrayList<Socket> jouers;
     private PrintWriter out = null;
     private BufferedReader in =null;
-	private Donjon scene1;
-	private Donjon scene2;
+    private ArrayList<Position> listMur = new ArrayList<Position>();
+    private ArrayList<Position> jPosHistorique = new ArrayList<Position>();
+    private ArrayList<Position> listPg = new ArrayList<Position>();
+    private ArrayList<Position> potion = new ArrayList<Position>();
 	private int x;
 	private int y;
     

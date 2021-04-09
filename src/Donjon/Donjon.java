@@ -115,10 +115,12 @@ public class Donjon extends JPanel {
 	
 	
 //***METHODES***//
-	private void addMur(Mur m) {
+	private void addMur(Position p) {
+		Mur m = new Mur(p.getX(),p.getY());
 		listMur.add(m);
 	}
 
+	
 	private void addNbMur(int nbmur) { // Alea des murs
 		int x;
 		int y;
@@ -127,7 +129,7 @@ public class Donjon extends JPanel {
 		y=50*genererInt(1,(yAlea-135)/50);
 		Mur a = new Mur(x,y);
 		if(x!=persoX&&y!=persoY&&!listMur.contains(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
-		addMur(a);												// pour l'instant pas grave
+											// pour l'instant pas grave
 		}
 		else {
 		i=i-1;	
