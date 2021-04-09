@@ -63,7 +63,10 @@ public class ServerDonjon extends Thread {
 		}
 	}
 
-		
+		public void PositionSortie() {
+			//this.persoX = (50*genererInt(2,(xScene-115)/50))+50; 
+			//this.persoY = (50*genererInt(2,(yScene-135)/100))+50;
+		}
 
 	public Donjon getMap() {
 		return this.scene1;

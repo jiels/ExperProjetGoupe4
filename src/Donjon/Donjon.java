@@ -40,24 +40,9 @@ public class Donjon extends JPanel {
 	private static int sortieX;
 	private static int sortieY;
 	
-	
-	
 	private Jouer joueur;
 
-	
-	//initialisation mur//
 	private Mur murExte;
-	private Mur testMur;
-	/////////////////
-	//initialisation coeur//
-	private PotionVie p1;
-	private PotionVie p2;
-	private PotionVie p3;
-	
-	//initialisation bombe//
-	private Bombe b1;
-	
-	private Pierre pierre;
 
 	private int xScene;
 	private int yScene;
@@ -67,16 +52,15 @@ public class Donjon extends JPanel {
 	public Donjon(int xScene, int yScene) {
 		super();
 		this.xFond1 = -50;
-		this.persoX = xScene-115;
-		this.persoY = yScene-125;
+		this.persoX = (50*genererInt((xScene-115)/75,(xScene-115)/50))+50; 
+		this.persoY = (50*genererInt((yScene-135)/75,(yScene-135)/50))+50;
 		this.xAlea= xScene;
 		this.yAlea= yScene;
 		this.xScene = xScene;
 		this.yScene = yScene;
-		this.setSortieX(50*genererInt((xScene-115)/100,(xScene-115)/50)); // où doit-être la sortie ? random ? si random : = 50*genererInt(0,xScene-115/50);
-		this.setSortieY(50*genererInt((yScene-135)/100,(yScene-135)/50)); // si je la veux en haut je peux choisir de ne prendre que entre xscene/2 et xscene
+		
 		//Fond
-		solFond = new ImageIcon("src/images/sol.jpg");
+		solFond = new ImageIcon("src/images/sol.png");
 		this.sol = this.solFond.getImage();
 		
 		//Joueur
@@ -85,20 +69,7 @@ public class Donjon extends JPanel {
 		//Placement Murs
 		murExte = new Mur(0,0);
 		
-		testMur = new Mur(100,100);
 		
-		
-		//addMur(Mur)
-		nbMur=((xAlea-115)/50)*((yAlea-135)/50)/5 ;// Si on décide de 1/5 de murs xscene=50*(x+2)+15 yscene50*(y+2)+35 
-		addNbMur(nbMur);
-
-		//Placement Coeur
-		p1 =new PotionVie(750, 100);
-		p2 =new PotionVie(150, 50);
-		p3 =new PotionVie(350, 300);
-	
-		//Placement Bombe
-		b1 = new Bombe(700, 400);
 		
 
 		
@@ -116,25 +87,8 @@ public class Donjon extends JPanel {
 	
 //***METHODES***//
 	private void addMur(Position p) {
-		Mur m = new Mur(p.getX(),p.getY());
+		Mur m= new Mur(p.getX(),p.getY());
 		listMur.add(m);
-	}
-
-	
-	private void addNbMur(int nbmur) { // Alea des murs
-		int x;
-		int y;
-	for(int i=0; i<nbmur; i++) {
-		x=50*genererInt(1,(xAlea-115)/50);
-		y=50*genererInt(1,(yAlea-135)/50);
-		Mur a = new Mur(x,y);
-		if(x!=persoX&&y!=persoY&&!listMur.contains(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
-											// pour l'instant pas grave
-		}
-		else {
-		i=i-1;	
-		}
-		} 
 	}
 	
 	public void deplacementPersoX() {
@@ -178,16 +132,12 @@ public class Donjon extends JPanel {
 			}
 		}
 	}
-	
 	public int genererInt(int borneInf, int borneSup){
 		   Random random = new Random();
 		   int nb;
 		   nb = borneInf+random.nextInt(borneSup-borneInf);
 		   return nb;
 		}
-
-	
-
 	
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -202,17 +152,15 @@ public class Donjon extends JPanel {
 			solide(it1.next());
 		}
 		
-		solide(testMur);
-		
 	
 	
 	
 	
 		
 		// Ramasse coeur
-		joueur.ramaserPotion(p1);
-		joueur.ramaserPotion(p2);
-		joueur.ramaserPotion(p3);
+		//joueur.ramaserPotion(p1);
+		//joueur.ramaserPotion(p2);
+		//joueur.ramaserPotion(p3);
 		
 		// bombe explose
 
@@ -246,24 +194,13 @@ public class Donjon extends JPanel {
 		//AFFICHAGE DES MURS
 		
 				int m = 0;
-				g2.drawImage(this.murExte.getImgMur(),50,50,null);
+				if(!getListMur().isEmpty())
 				for (int i = 0; i < getListMur().size(); i++) {
 				      m++;
-				      
 				      g2.drawImage(this.murExte.getImgMur(),getListMur().get(i).getX(),getListMur().get(i).getY(),null);
 				} 
 		
 	
-			
-		//affichage des coeurs
-		g2.drawImage(this.p1.getImgpotion(),this.p1.getX(),this.p1.getY(),null);
-		g2.drawImage(this.p1.getImgpotion(),this.p2.getX(),this.p2.getY(),null);
-		g2.drawImage(this.p1.getImgpotion(),this.p3.getX(),this.p3.getY(),null);
-		
-		//affichage des bombes
-		g2.drawImage(this.b1.getImgBombe(),this.b1.getX(),this.b1.getY(),null);
-		
-		
 			
 	}
 
