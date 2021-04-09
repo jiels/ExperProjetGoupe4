@@ -58,7 +58,6 @@ public class ServerDonjon extends Thread {
 			out.flush();
 		} catch (Exception e) {e.printStackTrace();}
 		}
-		scene1 = new Donjon(rx,ry);
 		while(true) {
 			
 		}
