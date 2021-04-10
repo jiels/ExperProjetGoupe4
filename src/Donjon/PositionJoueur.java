@@ -8,9 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class PositionJoueur implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -4785070648054522221L;
 	private Socket socket;
 	private ObjectOutputStream out;
