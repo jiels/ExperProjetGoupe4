@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import Objet.PotionVie;
+import Objet.Sol;
 import Objet.Bombe;
 import Objet.Mur;
 import Objet.Objet;
@@ -33,7 +34,10 @@ public class Donjon extends JPanel {
 	private int persoY;
 	private int y;
 	
-	private ArrayList<Mur>listMur = new ArrayList<>();
+	private ArrayList<Position>listMur = new ArrayList<>();
+	private ArrayList<Position>listBombe = new ArrayList<>();
+	private ArrayList<Position>listSol = new ArrayList<>();
+	
 	
 	private int nbMur;
 	
@@ -86,10 +90,6 @@ public class Donjon extends JPanel {
 	
 	
 //***METHODES***//
-	private void addMur(Position p) {
-		Mur m= new Mur(p.getX(),p.getY());
-		listMur.add(m);
-	}
 	
 	public void deplacementPersoX() {
 		if(this.persoX==xScene-100) {
@@ -147,16 +147,12 @@ public class Donjon extends JPanel {
 		//ServerClavier(this.comd);
 		//Collision solide
 		
-		Iterator<Mur> it1 = listMur.iterator();
+	/*	Iterator<Mur> it1 = listMur.iterator();
 		while(it1.hasNext()) {
 			solide(it1.next());
-		}
+		}*/
 		
 	
-	
-	
-	
-		
 		// Ramasse coeur
 		//joueur.ramaserPotion(p1);
 		//joueur.ramaserPotion(p2);
@@ -193,14 +189,23 @@ public class Donjon extends JPanel {
 				
 		//AFFICHAGE DES MURS
 		
-				int m = 0;
-				if(!getListMur().isEmpty())
-				for (int i = 0; i < getListMur().size(); i++) {
-				      m++;
-				      g2.drawImage(this.murExte.getImgMur(),getListMur().get(i).getX(),getListMur().get(i).getY(),null);
-				} 
-		
+				if(!listMur.isEmpty()) {
+				for (int i = 0; i < listMur.size(); i++) {
+						Mur m = new Mur(listMur.get(i).getX(),listMur.get(i).getY());
+				      g2.drawImage(m.getImgMur(),m.getX(),m.getY(),null);
+				} }
+				
+				if(!listBombe.isEmpty()) {
+					for (int i = 0; i < listBombe.size(); i++) {
+							Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
+					      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
+					} }
 	
+				if(!listSol.isEmpty()) {
+					for (int i = 0; i < listSol.size(); i++) {
+							Sol s = new Sol(listSol.get(i).getX(),listSol.get(i).getY());
+					      g2.drawImage(s.getImgSol(),s.getX(),s.getY(),null);
+					} }
 			
 	}
 
@@ -294,10 +299,17 @@ public class Donjon extends JPanel {
 		this.yScene = yScene;
 	}
 
-	public ArrayList<Mur> getListMur() {
-		return listMur;
+	public void setListMur(ArrayList<Position> p) {
+		this.listMur=p;
 	}
-
+	
+	public void setListBombe(ArrayList<Position> p) {
+		this.listBombe=p;
+	}
+	
+	public void setListSol(ArrayList<Position> p) {
+		this.listSol=p;
+	}
 
 	public int getSortieX() {
 		return sortieX;
