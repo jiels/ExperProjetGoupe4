@@ -14,15 +14,17 @@ import java.util.Scanner;
 
 import javax.swing.JFrame;
 
+import Donjon.Actions;
 import Donjon.CommandException;
+import Donjon.Position;
 
 
 
 public class Player{
 private Scanner sc;
 private String id;
-private PrintWriter out = null;
-private BufferedReader in =null;
+private ObjectOutputStream out = null;
+private ObjectInputStream in =null;
 private Socket socket;
 private int xm;
 private int ym;
@@ -37,8 +39,9 @@ public Player(){
 	try {
 		System.out.println("connexion au server........");
 		socket = new Socket("127.0.0.1", 6112);
-		in = new BufferedReader(new InputStreamReader( socket.getInputStream() ) );
-        out= new PrintWriter(socket.getOutputStream());
+		out = new ObjectOutputStream(socket.getOutputStream());
+        out.flush();
+        in = new ObjectInputStream(socket.getInputStream());
 		System.out.println("\nBienvenue a toi explorateur!");
 	}catch (IOException e) {
 		System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
@@ -91,16 +94,38 @@ public boolean commande(String a){
 }
 
 public void run() {
+	System.out.println("en attente d'autres joueurs.......");
 	try {
-		int i = Integer.valueOf(in.readLine());
-		this.xm=i;
-	} catch (Exception e) {e.printStackTrace();}
-	try {
-		int i = Integer.valueOf(in.readLine());
-		this.ym=i;
+		Position i = (Position) in.readObject();
+		 map = new ClientDonjon(id,i.getX(), i.getY());
+		 Thread t = new Thread(map);
+		 t.start();
+		 System.out.println("La partie a démarer !" );
 	} catch (Exception e) {e.printStackTrace();}
 	
+	try {
+		Position p =new Position(map.getScene().getPersoX(), map.getScene().getPersoY());
+		out.writeObject(p);
+		out.flush();
+		System.out.println("1"+p);
+		
+	} catch (Exception e) {e.printStackTrace();}
+	System.err.println("Les action posible sont| z:devant s:dèrière q:gauche d:doite v:utiliser positionde vie");
 	while(true) {
+		try {
+			System.out.print("\nVeillez entrer quatre action :");
+			String comd = sc.next();
+			String comd2 = maj(comd);
+			while(!commande(comd2)) {
+				System.out.print("action non reconnu réessayer : ");
+				comd = sc.next();
+				comd2 = maj(comd);
+			}
+			Actions ac = new Actions(comd2);
+			out.writeObject(ac);
+			out.flush();
+			System.out.println("En attent des autres joueurs......");
+		} catch (CommandException | IOException e) {e.printStackTrace();}
 		
 	}
 }

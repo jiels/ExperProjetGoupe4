@@ -45,7 +45,12 @@ public class Server{
         				clientList.add(client);
         				parties.add(party);
         				party.start();
-        				System.out.println(parties.size());
+        				for(int i=0 ; i<parties.size();i++) {
+        					if(parties.get(i).isInterrupted()) {
+        						parties.remove(i);
+        					}
+        				}
+        				System.out.println("Partie encourt: "+parties.size());
         			}
         			
         		}	

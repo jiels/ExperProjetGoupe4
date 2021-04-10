@@ -1,7 +1,13 @@
 package Donjon;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable,Comparable<Position>{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6298774822419706891L;
 	private int x;
 	private int y;
 
@@ -26,6 +32,15 @@ public class Position {
 		this.y = y;
 	}
 
+	@Override
+	public int compareTo(Position o) {
+		if(this.getX()==o.getX()&&this.getY()==o.getY()) {
+			return 0;
+		}
+		return -1;
+	}
+
+	
 	
 	
 	
