@@ -2,9 +2,6 @@ package GameServer;
 
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,7 +16,9 @@ public class ServerDonjon extends Thread {
     private ArrayList<PositionJoueur> joueurs=new ArrayList<PositionJoueur>();
     private ArrayList<Position> listMur = new ArrayList<Position>();
     private ArrayList<Position> listPg = new ArrayList<Position>();
-    private ArrayList<Position> potion = new ArrayList<Position>();
+    private ArrayList<Position> listMurTouch = new ArrayList<Position>();
+    private ArrayList<Position> listPgTouch = new ArrayList<Position>();
+    private ArrayList<Position> listPotion = new ArrayList<Position>();
 	private int x;
 	private int y;
 	private int rx;
@@ -31,9 +30,12 @@ public class ServerDonjon extends Thread {
 		try {
 			 this.x = largeur();
 			 this.y =hauteur();
+			 rx=50*(this.x+2)+15;
+			 ry=50*(this.y+2)+35;
+			 sortie=PositionSortie();
 			 addMur();
-			 
-			
+			 addPg();
+			 addPosion();
 		}catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -42,9 +44,7 @@ public class ServerDonjon extends Thread {
 	
 	
 	public void run() {
-		rx=50*(this.x+2)+15;
-		ry=50*(this.y+2)+35;
-		sortie=PositionSortie();
+		
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
@@ -66,6 +66,10 @@ public class ServerDonjon extends Thread {
 					ServerClavier(cmd.getCmd(), joueurs.get(i));
 				} catch (Exception e) {e.printStackTrace();}
 		}
+		
+			
+			
+			
 			
 		}
 	
@@ -130,7 +134,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&!listMur.contains(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listMur.add(a);
 				}
 			else {
@@ -139,27 +143,77 @@ public class ServerDonjon extends Thread {
 			} 
 		}
 	
+	private void addPg() { // Alea des murs
+		int x;
+		int y;
+		int nbmur =((rx-115)/50)*((ry-135)/50)/10;
+		for(int i=0; i<nbmur; i++) {
+			x=50*genererInt(1,(rx-115)/50);
+			y=50*genererInt(1,(ry-135)/50);
+			Position a = new Position(x,y);
+			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1&&listPg.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+				listPg.add(a);
+				}
+			else {
+				i=i-1;	
+				}
+			} 
+		}
 	
 	
+	private void addPosion() { // Alea des murs
+		int x;
+		int y;
+		int nbmur =5;
+		for(int i=0; i<nbmur; i++) {
+			x=50*genererInt(1,(rx-115)/50);
+			y=50*genererInt(1,(ry-135)/50);
+			Position a = new Position(x,y);
+			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1&&listPg.get(i).compareTo(a)==-1&&listPotion.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+				listPotion.add(a);
+				}
+			else {
+				i=i-1;	
+				}
+			} 
+		}
+	
+
 	public void ServerClavier(String cd ,PositionJoueur p) {
 		if(!cd.isEmpty()) {
 		for (int i=0;i<cd.length();i++) {
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_D) {//Doit
 				int tmpx =p.getPosition().getX()+50;
 				if(tmpx<rx-100) {
+					for(int e=0;e<listMur.size();e++) {
+						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							listMurTouch.add(listMur.get(e));
+							listMur.remove(e);
+						}}
+					for(int e=0;e<listPg.size();e++) {
+						if(listPg.get(e).compareTo(p.getPosition())==0) {
+							listPgTouch.add(listPg.get(e));
+							listPg.remove(e);
+						}}
 					p.getPosition().setX(tmpx);
 					p.setHispositiont(p.getPosition());
+					}
+					
+					
 				}
-				/*getJoueur().setMarche(true);
-				getJoueur().setVersDroite(true);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersB(false);
-				repaint();*/
-				
-			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Q) {//Gauche
 				int tmpx = p.getPosition().getX()-50;
 				if(tmpx>50) {
+					for(int e=0;e<listMur.size();e++) {
+						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							listMurTouch.add(listMur.get(e));
+							listMur.remove(e);
+						}}
+					for(int e=0;e<listPg.size();e++) {
+						if(listPg.get(e).compareTo(p.getPosition())==0) {
+							listPgTouch.add(listPg.get(e));
+							listPg.remove(e);
+						}}
 					p.getPosition().setX(tmpx);
 					p.setHispositiont(p.getPosition());
 				}
@@ -172,6 +226,16 @@ public class ServerDonjon extends Thread {
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_S) {//bas
 				int tmpy = p.getPosition().getY()+50;
 				if(tmpy<ry-100) {
+					for(int e=0;e<listMur.size();e++) {
+						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							listMurTouch.add(listMur.get(e));
+							listMur.remove(e);
+						}}
+					for(int e=0;e<listPg.size();e++) {
+						if(listPg.get(e).compareTo(p.getPosition())==0) {
+							listPgTouch.add(listPg.get(e));
+							listPg.remove(e);
+						}}
 					p.getPosition().setY(tmpy);
 					p.setHispositiont(p.getPosition());
 				}
@@ -186,26 +250,29 @@ public class ServerDonjon extends Thread {
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Z) {//haut
 				int tmpy = p.getPosition().getY()-50;
 				if(tmpy>50) {
+					for(int e=0;e<listMur.size();e++) {
+						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							listMurTouch.add(listMur.get(e));
+							listMur.remove(e);
+						}}
+					for(int e=0;e<listPg.size();e++) {
+						if(listPg.get(e).compareTo(p.getPosition())==0) {
+							listPgTouch.add(listPg.get(e));
+							listPg.remove(e);
+						}}
 					p.getPosition().setY(tmpy);
 					p.setHispositiont(p.getPosition());
 				}
-				/*getJoueur().setVersDroite(false);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersH(true);
-				getJoueur().setMarche(true);
-				getJoueur().setVersB(false);
-				repaint();*/
+				
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_V) {
 				p.moinPosion();
-				//repaint();
+				
 				
 			}
-			//getJoueur().setMarche(false);
-			
 		}
-		}
+	}
 	}
 	
 	
