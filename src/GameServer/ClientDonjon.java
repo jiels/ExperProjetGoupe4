@@ -56,7 +56,7 @@ public static void setRy(int ry) {
 
 
 
-public static Donjon getScene() {
+public Donjon getScene() {
 	return scene;
 }
 

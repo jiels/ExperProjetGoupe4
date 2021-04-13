@@ -33,9 +33,6 @@ public class ServerDonjon extends Thread {
 			 rx=50*(this.x+2)+15;
 			 ry=50*(this.y+2)+35;
 			 sortie=PositionSortie();
-			 addMur();
-			 addPg();
-			 addPosion();
 		}catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -44,7 +41,9 @@ public class ServerDonjon extends Thread {
 	
 	
 	public void run() {
-		
+		addMur();
+		addPg();
+		addPosion();
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
@@ -65,7 +64,20 @@ public class ServerDonjon extends Thread {
 					Actions cmd = (Actions)joueurs.get(i).getIn().readObject();
 					ServerClavier(cmd.getCmd(), joueurs.get(i));
 				} catch (Exception e) {e.printStackTrace();}
-		}
+			}
+			for(int i =0; i<joueurs.size();i++) {
+				try {
+					joueurs.get(i).getOut().writeObject(joueurs.get(i).getPosition());
+					joueurs.get(i).getOut().flush();
+				} catch (Exception e) {e.printStackTrace();}
+				try {
+					joueurs.get(i).getOut().writeObject(listMurTouch);
+				} catch (Exception e) {e.printStackTrace();}
+				try {
+					joueurs.get(i).getOut().writeObject(joueurs.get(i).getInfon());
+				} catch (Exception e) {e.printStackTrace();}
+				
+			}
 		
 			
 			
@@ -130,11 +142,12 @@ public class ServerDonjon extends Thread {
 		int x;
 		int y;
 		int nbmur =((rx-115)/50)*((ry-135)/50)/5;
+		listMur.add(new Position(0, 0));
 		for(int i=0; i<nbmur; i++) {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listMur.add(a);
 				}
 			else {
@@ -151,7 +164,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1&&listPg.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)){//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listPg.add(a);
 				}
 			else {
@@ -169,7 +182,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(y!=sortie.getY()&&x!= sortie.getX()&&x!=joueurs.get(i).getPosition().getX()&&y!=joueurs.get(i).getPosition().getY()&&listMur.get(i).compareTo(a)==-1&&listPg.get(i).compareTo(a)==-1&&listPotion.get(i).compareTo(a)==-1) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)&&comparListpg(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listPotion.add(a);
 				}
 			else {
@@ -187,13 +200,14 @@ public class ServerDonjon extends Thread {
 				if(tmpx<rx-100) {
 					for(int e=0;e<listMur.size();e++) {
 						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							tmpx=listMur.get(e).getX()-50;
 							listMurTouch.add(listMur.get(e));
-							listMur.remove(e);
+							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							listPgTouch.add(listPg.get(e));
-							listPg.remove(e);
+							e+=1;
 						}}
 					p.getPosition().setX(tmpx);
 					p.setHispositiont(p.getPosition());
@@ -206,45 +220,39 @@ public class ServerDonjon extends Thread {
 				if(tmpx>50) {
 					for(int e=0;e<listMur.size();e++) {
 						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							tmpx=listMur.get(e).getX()+50;
 							listMurTouch.add(listMur.get(e));
-							listMur.remove(e);
+							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							listPgTouch.add(listPg.get(e));
-							listPg.remove(e);
+							e+=1;
 						}}
 					p.getPosition().setX(tmpx);
 					p.setHispositiont(p.getPosition());
 				}
-				/*getJoueur().setMarche(true);
-				getJoueur().setVersGauche(true);
-				getJoueur().setVersDroite(false);
-				getJoueur().setVersB(false);
-				repaint();*/
+				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_S) {//bas
 				int tmpy = p.getPosition().getY()+50;
 				if(tmpy<ry-100) {
 					for(int e=0;e<listMur.size();e++) {
 						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							tmpy=listMur.get(e).getY()-50;
 							listMurTouch.add(listMur.get(e));
-							listMur.remove(e);
+							e+=1;
+					
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							listPgTouch.add(listPg.get(e));
-							listPg.remove(e);
+							e+=1;
 						}}
 					p.getPosition().setY(tmpy);
 					p.setHispositiont(p.getPosition());
 				}
-				/*getJoueur().setVersDroite(false);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersB(true);
-				getJoueur().setVersH(false);
-				getJoueur().setMarche(true);
-				repaint();*/
+				
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Z) {//haut
@@ -252,13 +260,15 @@ public class ServerDonjon extends Thread {
 				if(tmpy>50) {
 					for(int e=0;e<listMur.size();e++) {
 						if(listMur.get(e).compareTo(p.getPosition())==0) {
+							tmpy=listMur.get(e).getY()+50;
 							listMurTouch.add(listMur.get(e));
-							listMur.remove(e);
+							e+=1;
+							
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							listPgTouch.add(listPg.get(e));
-							listPg.remove(e);
+							e+=1;
 						}}
 					p.getPosition().setY(tmpy);
 					p.setHispositiont(p.getPosition());
@@ -274,6 +284,64 @@ public class ServerDonjon extends Thread {
 		}
 	}
 	}
+
+	public boolean comparListMur(Position p) {
+		boolean t = true;
+		if(!listMur.isEmpty()) {
+			for(int i=0;i<listMur.size();i++) {
+				if(listMur.get(i).compareTo(p)==-1) {
+					t =true;
+				}
+				else {
+					t=false;
+				}
+			}
+		}
+		return t;
+	}
 	
+	public boolean comparJoueurs(Position p) {
+		boolean a = false;
+		for(int i=0;i<joueurs.size();i++) {
+			if(joueurs.get(i).getPosition().compareTo(p)==-1) {
+				a =true;
+			}
+			else{
+				a=false;
+			}
+		}
+		return a;
+	}
+	
+	public boolean comparListpg(Position p) {
+		boolean a =true;
+		if(!listPg.isEmpty()) {
+			for(int i =0;i<listPg.size();i++) {
+				if(listPg.get(i).compareTo(p)==-1) {
+					a =true;
+				}
+				else {
+					a=false;
+					
+				}
+			}
+		}
+		return a;
+	}
+
+	public boolean comparListePosion(Position p) {
+		boolean a=true;
+		if(!listPotion.isEmpty()) {
+			for(int i=0;i<listPotion.size();i++){
+				if(listPotion.get(i).compareTo(p)==-1) {
+					a=true;
+				}
+				else {
+					a=false;
+				}
+			}
+		}
+		return a;
+	}
 	
 }

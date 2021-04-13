@@ -45,15 +45,15 @@ public class Server{
         				clientList.add(client);
         				parties.add(party);
         				party.start();
-        				for(int i=0 ; i<parties.size();i++) {
-        					if(parties.get(i).isInterrupted()) {
-        						parties.remove(i);
-        					}
-        				}
         				System.out.println("Partie encourt: "+parties.size());
         			}
         			
-        		}	
+        		}
+        		for(int i=0 ; i<parties.size();i++) {
+					if(parties.get(i).isInterrupted()) {
+						parties.remove(i);
+					}
+				}
         
 				
 			} catch (IOException e) {

@@ -1,18 +1,12 @@
 package GameServer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
 
 import Donjon.Actions;
 import Donjon.CommandException;
@@ -126,8 +120,27 @@ public void run() {
 			out.flush();
 			System.out.println("En attent des autres joueurs......");
 		} catch (CommandException | IOException e) {e.printStackTrace();}
+		try {
+			Position pp =(Position)in.readObject();
+			map.getScene().setPersoX(pp.getX());
+			map.getScene().setPersoY(pp.getY());
+		} catch (Exception e) {e.printStackTrace();}
+		try {
+			Object readObject = in.readObject();
+			ArrayList<Position> listeM = extracted(readObject);
+			map.getScene().setListMur(listeM);	
+		} catch (Exception e) {e.printStackTrace();}
+		try {
+			String a =(String)in.readObject();
+			System.out.println(a);
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
+}
+
+
+private ArrayList<Position> extracted(Object readObject) {
+	return (ArrayList<Position>)readObject;
 }
 
 

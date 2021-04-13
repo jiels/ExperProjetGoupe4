@@ -79,12 +79,12 @@ public class Donjon extends JPanel {
 		
 		///////////////////////////
 		
-		/*this.setFocusable(true);
-		this.requestFocusInWindow();*/
+		this.setFocusable(true);
+		this.requestFocusInWindow();
 		
 		
-		/*Thread ecranRefresh = new Thread(new SceenRefresh(this));
-		ecranRefresh.start();*/}
+		Thread ecranRefresh = new Thread(new SceenRefresh(this));
+		ecranRefresh.start();}
 	 
 	
 	
