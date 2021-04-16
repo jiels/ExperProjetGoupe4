@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Server{
 	public static final int PORT=6112;
 	private ArrayList<Socket> clientList;
-	private ArrayList<ServerDonjon> parties;
+	private ArrayList<Thread> parties;
 	private ServerSocket serverSocket;
 	
 	
@@ -23,45 +23,27 @@ public class Server{
         	serverSocket = new ServerSocket(PORT);
             serverSocket.setReuseAddress(true);
             clientList= new ArrayList<Socket>();
-            parties = new ArrayList<ServerDonjon>();
+            parties = new ArrayList<Thread>();
             System.out.println("serveur connecté!");
-        } catch (IOException e) {
-            System.err.println("Le serveur n'a pas pu démarrer");
-            System.err.println(e);
-            System.exit(1);
-        } 
-        while(true) {
-        	try {
-        		ServerDonjon party =new ServerDonjon();
-        		Socket client = serverSocket.accept();
-        		party.newPlayer(client);
-        		clientList.add(client);
-        		while(party.nJouers()<2) {
-        			if(clientList.contains(client)) {
-        				client = serverSocket.accept();
-        			}
-        			else {
-        				party.newPlayer(client);
-        				clientList.add(client);
-        				parties.add(party);
-        				party.start();
-        				System.out.println("Partie encourt: "+parties.size());
-        			}
-        			
-        		}
-        		for(int i=0 ; i<parties.size();i++) {
-					if(parties.get(i).isInterrupted()) {
-						parties.remove(i);
-					}
-				}
+            int n =0;
+            while(true) {
+            	ServerDonjon party =new ServerDonjon(this);
+            	while(n<2) {
+            		Socket client = serverSocket.accept();
+            		party.newPlayer(client);
+            		clientList.add(client);
+            		n+=1;
+            		}
+            	party.start();
+            	n=0;
         
-				
-			} catch (IOException e) {
-				System.err.println("Une erreure est arrivée lorsqu'un joueur a tenté de se connecter... ");
-                System.err.println(e);
-			}
+        }	
+  
+        }catch (IOException e) {e.printStackTrace();}
+        
+                
         }
-	}
+
 
 	public static void main(String argv[]) throws UnknownHostException, IOException {
         new Server();

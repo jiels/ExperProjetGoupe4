@@ -16,7 +16,9 @@ public class PositionJoueur implements Serializable{
 	private Position position;
 	private int vie = 5;
 	private int posion = 0;
-	private ArrayList<Position> hisposition= new ArrayList<Position>() ;
+	private ArrayList<Position> hisposition= new ArrayList<Position>();
+	private ArrayList<Position> listMurTouch = new ArrayList<Position>();
+    private ArrayList<Position> listPgTouch = new ArrayList<Position>();
 
 	public PositionJoueur(Socket  id ,Position p) {
 		this.socket=id;
@@ -88,6 +90,26 @@ public class PositionJoueur implements Serializable{
 
 	public ObjectInputStream getIn() {
 		return in;
+	}
+
+
+	public ArrayList<Position> getListMurTouch() {
+		return listMurTouch;
+	}
+
+
+	public void setListMurTouch(ArrayList<Position> listMurTouch) {
+		this.listMurTouch = listMurTouch;
+	}
+
+
+	public ArrayList<Position> getListPgTouch() {
+		return listPgTouch;
+	}
+
+
+	public void setListPgTouch(ArrayList<Position> listPgTouch) {
+		this.listPgTouch = listPgTouch;
 	}
 	
 	

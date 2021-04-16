@@ -164,10 +164,10 @@ public class Donjon extends JPanel {
 		
 		//Déplacement personnage
 		
-		this.deplacementPersoX();
-		this.deplacementPersoY();
-		joueur.setX(persoX);
-		joueur.setY(persoY);
+		/*this.deplacementPersoX();
+		this.deplacementPersoY();*/
+		/*joueur.setX(persoX);
+		joueur.setY(persoY);*/
 		
 
 		//placement du perso et du fond

@@ -3,6 +3,7 @@ package GameServer;
 import javax.swing.JFrame;
 
 import Donjon.Donjon;
+import Donjon.Position;
 
 public class ClientDonjon implements Runnable {
 	private static int rx;
@@ -60,6 +61,12 @@ public Donjon getScene() {
 	return scene;
 }
 
+public void setJoueurPosition(Position p) {
+	scene.getJoueur().setX(p.getX());
+	scene.getJoueur().setY(p.getY());
+	scene.repaint();
+	
+}
 
 
 public static void setScene(Donjon scene) {

@@ -2,6 +2,7 @@ package GameServer;
 
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,25 +14,27 @@ import Donjon.PositionJoueur;
 
 
 public class ServerDonjon extends Thread {
-    private ArrayList<PositionJoueur> joueurs=new ArrayList<PositionJoueur>();
+    ArrayList<PositionJoueur> joueurs=new ArrayList<PositionJoueur>();
     private ArrayList<Position> listMur = new ArrayList<Position>();
     private ArrayList<Position> listPg = new ArrayList<Position>();
-    private ArrayList<Position> listMurTouch = new ArrayList<Position>();
-    private ArrayList<Position> listPgTouch = new ArrayList<Position>();
     private ArrayList<Position> listPotion = new ArrayList<Position>();
+    private ArrayList<Socket>socket = new ArrayList<Socket>();
 	private int x;
 	private int y;
 	private int rx;
 	private int ry;
 	private Position sortie ;
+	private boolean winer=false;
     
 //***CONTRUCTEUR***//
-	public ServerDonjon() {
+	public ServerDonjon(Server server) {
+		super("ServerDonjon");
 		try {
 			 this.x = largeur();
 			 this.y =hauteur();
 			 rx=50*(this.x+2)+15;
 			 ry=50*(this.y+2)+35;
+			 
 			 sortie=PositionSortie();
 		}catch (Exception e) {e.printStackTrace();}
 	}
@@ -50,53 +53,33 @@ public class ServerDonjon extends Thread {
 				
 				joueurs.get(i).getOut().writeObject(t);
 				joueurs.get(i).getOut().flush();
-				} catch (Exception e) {e.printStackTrace();}
-			try {
+			
 				Position pp = (Position)joueurs.get(i).getIn().readObject();
 				joueurs.get(i).setPosition(pp);
 				joueurs.get(i).setHispositiont(pp);
 			} catch (Exception e) {e.printStackTrace();}
 		
 		}
-		while(true) {
-			for(int i =0;i<joueurs.size();i++) {
-				try {
+		try {	
+			while(!winer) {
+				for(int i =0;i<joueurs.size();i++) {
 					Actions cmd = (Actions)joueurs.get(i).getIn().readObject();
 					ServerClavier(cmd.getCmd(), joueurs.get(i));
-				} catch (Exception e) {e.printStackTrace();}
-			}
-			for(int i =0; i<joueurs.size();i++) {
-				try {
 					joueurs.get(i).getOut().writeObject(joueurs.get(i).getPosition());
 					joueurs.get(i).getOut().flush();
-				} catch (Exception e) {e.printStackTrace();}
-				try {
-					joueurs.get(i).getOut().writeObject(listMurTouch);
-				} catch (Exception e) {e.printStackTrace();}
-				try {
+					joueurs.get(i).getOut().writeObject(joueurs.get(i).getListMurTouch());
+					joueurs.get(i).getOut().flush();
 					joueurs.get(i).getOut().writeObject(joueurs.get(i).getInfon());
-				} catch (Exception e) {e.printStackTrace();}
-				
+					joueurs.get(i).getOut().flush();
+					}
+				}
+			for(int i=0;i<joueurs.size();i++) {
+				joueurs.get(i).getIn().close();
+				joueurs.get(i).getOut().close();
+				joueurs.get(i).getSocket().close();
 			}
-		
-			
-			
-			
-			
-		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		}catch (Exception e) {e.printStackTrace();}
+
 	}
 
 	
@@ -199,14 +182,14 @@ public class ServerDonjon extends Thread {
 				int tmpx =p.getPosition().getX()+50;
 				if(tmpx<rx-100) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).compareTo(p.getPosition())==0) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()-50;
-							listMurTouch.add(listMur.get(e));
+							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
-							listPgTouch.add(listPg.get(e));
+							p.getListPgTouch().add(listPg.get(e));
 							e+=1;
 						}}
 					p.getPosition().setX(tmpx);
@@ -219,14 +202,14 @@ public class ServerDonjon extends Thread {
 				int tmpx = p.getPosition().getX()-50;
 				if(tmpx>50) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).compareTo(p.getPosition())==0) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()+50;
-							listMurTouch.add(listMur.get(e));
+							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
-							listPgTouch.add(listPg.get(e));
+							p.getListPgTouch().add(listPg.get(e));
 							e+=1;
 						}}
 					p.getPosition().setX(tmpx);
@@ -238,15 +221,15 @@ public class ServerDonjon extends Thread {
 				int tmpy = p.getPosition().getY()+50;
 				if(tmpy<ry-100) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).compareTo(p.getPosition())==0) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpy=listMur.get(e).getY()-50;
-							listMurTouch.add(listMur.get(e));
+							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
 					
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
-							listPgTouch.add(listPg.get(e));
+							p.getListPgTouch().add(listPg.get(e));
 							e+=1;
 						}}
 					p.getPosition().setY(tmpy);
@@ -259,15 +242,15 @@ public class ServerDonjon extends Thread {
 				int tmpy = p.getPosition().getY()-50;
 				if(tmpy>50) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).compareTo(p.getPosition())==0) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpy=listMur.get(e).getY()+50;
-							listMurTouch.add(listMur.get(e));
+							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
 							
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
-							listPgTouch.add(listPg.get(e));
+							p.getListPgTouch().add(listPg.get(e));
 							e+=1;
 						}}
 					p.getPosition().setY(tmpy);
