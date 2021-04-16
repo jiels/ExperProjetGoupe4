@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import Objet.PotionVie;
 import Objet.Sol;
 import Objet.Bombe;
+import Objet.Cle;
 import Objet.Mur;
 import Objet.Objet;
 import Objet.Pierre;
@@ -37,7 +38,7 @@ public class Donjon extends JPanel {
 	private ArrayList<Position>listMur = new ArrayList<>();
 	private ArrayList<Position>listBombe = new ArrayList<>();
 	private ArrayList<Position>listSol = new ArrayList<>();
-	
+	private ArrayList<Position>listCle = new ArrayList<>();
 	
 	private int nbMur;
 	
@@ -205,6 +206,11 @@ public class Donjon extends JPanel {
 					for (int i = 0; i < listSol.size(); i++) {
 							Sol s = new Sol(listSol.get(i).getX(),listSol.get(i).getY());
 					      g2.drawImage(s.getImgSol(),s.getX(),s.getY(),null);
+					} }
+				if(!listCle.isEmpty()) {
+					for (int i = 0; i < listCle.size(); i++) {
+							Cle s = new Cle(listCle.get(i).getX(),listCle.get(i).getY());
+					      g2.drawImage(s.getImgCle(),s.getX(),s.getY(),null);
 					} }
 			
 	}
