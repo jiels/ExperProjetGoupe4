@@ -316,6 +316,10 @@ public class Donjon extends JPanel {
 	public void setListSol(ArrayList<Position> p) {
 		this.listSol=p;
 	}
+	
+	public void setlistCle(Position p) {
+		this.listCle.add(p);
+	}
 
 	public int getSortieX() {
 		return sortieX;

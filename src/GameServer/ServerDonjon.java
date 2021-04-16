@@ -23,7 +23,7 @@ public class ServerDonjon extends Thread {
 	private int y;
 	private int rx;
 	private int ry;
-	private Position sortie ;
+	private Position cle ;
 	private boolean winer=false;
     
 //***CONTRUCTEUR***//
@@ -35,7 +35,7 @@ public class ServerDonjon extends Thread {
 			 rx=50*(this.x+2)+15;
 			 ry=50*(this.y+2)+35;
 			 
-			 sortie=PositionSortie();
+			 cle=positionCle();
 		}catch (Exception e) {e.printStackTrace();}
 	}
 	
@@ -83,7 +83,7 @@ public class ServerDonjon extends Thread {
 	}
 
 	
-	public Position PositionSortie() {
+	public Position positionCle() {
 		return new Position((50*genererInt(2,(rx-115)/50))+50,(50*genererInt(2,(ry-135)/100))+50);
 	}
 
@@ -130,7 +130,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(cle)==-1&&comparListMur(a)&&comparJoueurs(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listMur.add(a);
 				}
 			else {
@@ -147,7 +147,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)){//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(cle)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)){//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listPg.add(a);
 				}
 			else {
@@ -165,7 +165,7 @@ public class ServerDonjon extends Thread {
 			x=50*genererInt(1,(rx-115)/50);
 			y=50*genererInt(1,(ry-135)/50);
 			Position a = new Position(x,y);
-			if(a.compareTo(sortie)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)&&comparListpg(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
+			if(a.compareTo(cle)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)&&comparListpg(a)) {//marche pas : 2 murs peuvent avoir la meme coordonnée
 				listPotion.add(a);
 				}
 			else {
