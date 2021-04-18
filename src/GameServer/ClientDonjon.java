@@ -64,7 +64,7 @@ public Donjon getScene() {
 public void setJoueurPosition(Position p) {
 	scene.getJoueur().setX(p.getX());
 	scene.getJoueur().setY(p.getY());
-	scene.repaint();
+	//scene.repaint();
 	
 }
 

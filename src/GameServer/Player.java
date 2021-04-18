@@ -90,10 +90,10 @@ public void run() {
 	System.out.println("en attente d'autres joueurs.......");
 	try {
 		Position i = (Position) in.readObject();
-		 map = new ClientDonjon(id,i.getX(), i.getY());
-		 Thread t = new Thread(map);
-		 t.start();
-		 System.out.println("La partie a démarer !" );
+		map = new ClientDonjon(id,i.getX(), i.getY());
+		Thread t = new Thread(map);
+		t.start();
+		System.out.println("La partie a démarer !" );
 	} catch (Exception e) {e.printStackTrace();}
 	
 	try {
@@ -124,15 +124,16 @@ public void run() {
 			System.out.println("En attent des autres joueurs......");
 			
 	
-			Position pp =null;
 			
-			pp=(Position)in.readObject();
-			System.out.println(pp.getX());
+			System.out.println(map.getScene().getJoueur().getX()+" "+map.getScene().getJoueur().getY());
+			Object p = in.readObject();
+			Position pp = (Position)p;
+			System.out.println(pp);
 			this.map.setJoueurPosition(pp);
 			
 			Object readObject = in.readObject();
 			ArrayList<Position> listeM = extracted(readObject);
-			System.out.println(listeM.toString());
+			System.out.println(listeM);
 			this.map.getScene().setListMur(listeM);	
 			
 			

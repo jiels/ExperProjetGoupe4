@@ -3,22 +3,25 @@ package GameServer;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
 import Donjon.Actions;
 import Donjon.Position;
-import Donjon.PositionJoueur;
+import Donjon.StatsJoueur;
 
 
 
 public class ServerDonjon extends Thread {
-    ArrayList<PositionJoueur> joueurs=new ArrayList<PositionJoueur>();
+    ArrayList<StatsJoueur> joueurs=new ArrayList<StatsJoueur>();
     private ArrayList<Position> listMur = new ArrayList<Position>();
     private ArrayList<Position> listPg = new ArrayList<Position>();
     private ArrayList<Position> listPotion = new ArrayList<Position>();
-    private ArrayList<Socket>socket = new ArrayList<Socket>();
+    private ArrayList<ObjectOutputStream>out = new ArrayList<ObjectOutputStream>();
+    private ArrayList<ObjectInputStream>in = new ArrayList<ObjectInputStream>();
 	private int x;
 	private int y;
 	private int rx;
@@ -64,12 +67,22 @@ public class ServerDonjon extends Thread {
 			while(!winer) {
 				for(int i =0;i<joueurs.size();i++) {
 					Actions cmd = (Actions)joueurs.get(i).getIn().readObject();
-					ServerClavier(cmd.getCmd(), joueurs.get(i));
-					joueurs.get(i).getOut().writeObject(joueurs.get(i).getPosition());
+					StatsJoueur p =  ServerClavier(cmd.getCmd(), joueurs.get(i));
+					System.out.println("0"+""+p.getPosition());
+					System.out.println("1"+""+joueurs.get(i).getPosition());
+					joueurs.get(i).setJoueur(p);
+					System.out.println("2"+""+joueurs.get(i).getPosition());
+					
+				}
+				for(int i =0;i<joueurs.size();i++) {
+					Position a = joueurs.get(i).getPosition();
+					joueurs.get(i).getOut().writeObject(a);
 					joueurs.get(i).getOut().flush();
-					joueurs.get(i).getOut().writeObject(joueurs.get(i).getListMurTouch());
+					ArrayList<Position> bb = joueurs.get(i).getListMurTouch();
+					joueurs.get(i).getOut().writeObject(bb);
 					joueurs.get(i).getOut().flush();
-					joueurs.get(i).getOut().writeObject(joueurs.get(i).getInfon());
+					String bgg = joueurs.get(i).getInfo();
+					joueurs.get(i).getOut().writeObject(bgg);
 					joueurs.get(i).getOut().flush();
 					}
 				}
@@ -106,8 +119,8 @@ public class ServerDonjon extends Thread {
 		return yy.get(y);
 	}
 
-	public void newPlayer(Socket s) {
-		this.joueurs.add(new PositionJoueur(s,new Position(0,0)));
+	public void newPlayer(Socket s) throws IOException {
+		this.joueurs.add(new StatsJoueur(s,new Position(0,0)));
 	}
 	
 	public Integer nJouers() {
@@ -175,14 +188,15 @@ public class ServerDonjon extends Thread {
 		}
 	
 
-	public void ServerClavier(String cd ,PositionJoueur p) {
+	public StatsJoueur ServerClavier(String cd ,StatsJoueur pp) {
+		StatsJoueur p = pp;
 		if(!cd.isEmpty()) {
 		for (int i=0;i<cd.length();i++) {
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_D) {//Doit
 				int tmpx =p.getPosition().getX()+50;
 				if(tmpx<rx-100) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
+						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()-50;
 							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
@@ -202,7 +216,7 @@ public class ServerDonjon extends Thread {
 				int tmpx = p.getPosition().getX()-50;
 				if(tmpx>50) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
+						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()+50;
 							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
@@ -221,7 +235,7 @@ public class ServerDonjon extends Thread {
 				int tmpy = p.getPosition().getY()+50;
 				if(tmpy<ry-100) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()-50;
 							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
@@ -242,7 +256,7 @@ public class ServerDonjon extends Thread {
 				int tmpy = p.getPosition().getY()-50;
 				if(tmpy>50) {
 					for(int e=0;e<listMur.size();e++) {
-						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==p.getPosition().getY()) {
+						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()+50;
 							p.getListMurTouch().add(listMur.get(e));
 							e+=1;
@@ -260,12 +274,14 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_V) {
-				p.moinPosion();
+				p.moinPotion();
 				
 				
 			}
 		}
+		
 	}
+		return p;
 	}
 
 	public boolean comparListMur(Position p) {

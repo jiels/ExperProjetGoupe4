@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class PositionJoueur implements Serializable{
+public class StatsJoueur implements Serializable{
 	
 	private static final long serialVersionUID = -4785070648054522221L;
 	private Socket socket;
@@ -15,12 +15,12 @@ public class PositionJoueur implements Serializable{
 	private ObjectInputStream in ;
 	private Position position;
 	private int vie = 5;
-	private int posion = 0;
+	private int potion = 0;
 	private ArrayList<Position> hisposition= new ArrayList<Position>();
 	private ArrayList<Position> listMurTouch = new ArrayList<Position>();
     private ArrayList<Position> listPgTouch = new ArrayList<Position>();
 
-	public PositionJoueur(Socket  id ,Position p) {
+	public StatsJoueur(Socket  id ,Position p) {
 		this.socket=id;
 		this.position = p;
 		try {
@@ -34,6 +34,16 @@ public class PositionJoueur implements Serializable{
         
 	}
 	
+	
+	
+	public void setJoueur(StatsJoueur p) {
+		this.position = p.position;
+		this.hisposition = p.hisposition;
+		this.listMurTouch = p.listMurTouch;
+		this.listPgTouch = p.listPgTouch;
+		this.vie = p.vie;
+		this.potion = p.potion;
+	}
 
 	public Socket  getSocket() {
 		return socket;
@@ -64,17 +74,17 @@ public class PositionJoueur implements Serializable{
 		}
 	}
 
-	public String getInfon() {
-		String inf = "vie: "+this.vie+" Posion: "+this.posion;
+	public String getInfo() {
+		String inf = "vie: "+this.vie+" Posion: "+this.potion;
 		return inf ;
 	}
 
-	public void plusPosion() {
-		this.posion += 1;
+	public void plusPotion() {
+		this.potion += 1;
 	}
-	public void moinPosion() {
-		if(this.posion>0) {
-			this.posion -=1;
+	public void moinPotion() {
+		if(this.potion>0) {
+			this.potion -=1;
 		}
 	}
 
@@ -95,6 +105,9 @@ public class PositionJoueur implements Serializable{
 
 	public ArrayList<Position> getListMurTouch() {
 		return listMurTouch;
+	}
+	public void addMu(Position p) {
+		listMurTouch.add(p);
 	}
 
 
