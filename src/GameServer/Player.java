@@ -1,9 +1,18 @@
 package GameServer;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,13 +20,14 @@ import java.util.Scanner;
 import Donjon.Actions;
 import Donjon.CommandException;
 import Donjon.Position;
+import Donjon.StatsJoueur;
 
 
 
 public class Player{
 private String id;
-private ObjectOutputStream out = null;
-private ObjectInputStream in =null;
+private DataOutputStream out = null;
+private DataInputStream in =null;
 private Socket socket;
 private int xm;
 private int ym;
@@ -32,9 +42,9 @@ public Player(){
 	try {
 		System.out.println("connexion au server........");
 		socket = new Socket("127.0.0.1", 6112);
-		out = new ObjectOutputStream(socket.getOutputStream());
+		out = new DataOutputStream(socket.getOutputStream());
         out.flush();
-        in = new ObjectInputStream(socket.getInputStream());
+        in = new DataInputStream(socket.getInputStream());
 		System.out.println("\nBienvenue a toi explorateur!");
 	}catch (IOException e) {
 		System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
@@ -89,7 +99,13 @@ public boolean commande(String a){
 public void run() {
 	System.out.println("en attente d'autres joueurs.......");
 	try {
-		Position i = (Position) in.readObject();
+		int fileByte = in.readInt();
+		if(fileByte>0) {
+			byte[] file = new byte[fileByte];
+			in.readFully(file, 0, file.length);
+			savefile(file);
+		}
+		Position i = (Position) ReadObjectFromFile();
 		map = new ClientDonjon(id,i.getX(), i.getY());
 		Thread t = new Thread(map);
 		t.start();
@@ -98,13 +114,22 @@ public void run() {
 	
 	try {
 		Position p =new Position(map.getScene().getPersoX(), map.getScene().getPersoY());
-		out.writeObject(p);
+		WriteObjectToFile(p);
+		File file = new File("src\\TmpJoueur\\"+"id"+"Objets.dit");
+		final File[] filetosent = new File[1];
+		filetosent[0]=file;
+		FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+		byte[]filebyte = new byte[(int)filetosent[0].length()];
+		fileInputStream.read(filebyte);
+		out.writeInt(filebyte.length);
+		out.flush();
+		out.write(filebyte);
 		out.flush();
 		
 	} catch (Exception e) {e.printStackTrace();}
 	System.err.println("Les action posible sont| z:devant s:dèrière q:gauche d:doite v:utiliser positionde vie");
 	
-	try {
+	try{
 	while(true) {
 		
 			System.out.print("\nVeillez entrer quatre action :");
@@ -116,30 +141,52 @@ public void run() {
 				String comd3 = sc.next();
 				comd2 = maj(comd3);
 			}
-			
-			Actions ac =null;
-			ac=new Actions(comd2);
-			out.writeObject(ac);
+			WriteObjectToFile(comd2);
+			File file = new File("src\\TmpJoueur\\"+"id"+"Objets.dit");
+			final File[] filetosent = new File[1];
+			filetosent[0]=file;
+			FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+			byte[]filebyte = new byte[(int)filetosent[0].length()];
+			fileInputStream.read(filebyte);
+			out.writeInt(filebyte.length);
+			out.flush();
+			out.write(filebyte);
 			out.flush();
 			System.out.println("En attent des autres joueurs......");
 			
 	
 			
-			System.out.println(map.getScene().getJoueur().getX()+" "+map.getScene().getJoueur().getY());
-			Object p = in.readObject();
-			Position pp = (Position)p;
-			System.out.println(pp);
-			this.map.setJoueurPosition(pp);
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+					Position pp = (Position)ReadObjectFromFile();
+					System.out.println(pp);
+					this.map.setJoueurPosition(pp);
+			}catch (Exception e) {e.printStackTrace();}
 			
-			Object readObject = in.readObject();
-			ArrayList<Position> listeM = extracted(readObject);
-			System.out.println(listeM);
-			this.map.getScene().setListMur(listeM);	
+			
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+				ArrayList<Position> listeM =extracted(ReadObjectFromFile());
+				System.out.println(listeM);
+				this.map.getScene().setListMur(listeM);		
+			}catch (Exception e) {e.printStackTrace();}
 			
 			
-			Object a = in.readObject();
-			System.out.println((String)a);
-		
+			
+			
+			
+			/*String a = p.getInfo();
+			System.out.println(a);*/
 	}
 } catch (Exception e) {e.printStackTrace();}
 	
@@ -151,11 +198,47 @@ private ArrayList<Position> extracted(Object readObject) {
 	return (ArrayList<Position>)readObject;
 }
 
+public Object ReadObjectFromFile() {
+	 
+    try {
+
+        FileInputStream fileIn = new FileInputStream("src\\TmpJoueur\\"+id+"Objetsrecu.dit");
+        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+        Object obj = objectIn.readObject();
+
+        System.out.println("The Object has been read from the file");
+        objectIn.close();
+        return obj;
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        return null;
+    }
+}
+
+public void WriteObjectToFile(Object serObj) { 
+    try {
+        FileOutputStream fileOut = new FileOutputStream("src\\TmpJoueur\\"+"id"+"Objets.dit");
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(serObj);
+        objectOut.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+}
+
+
+public void savefile(byte[] e) throws FileNotFoundException, IOException {
+	try (
+			FileOutputStream stream = new FileOutputStream("src\\TmpJoueur\\"+id+"Objetsrecu.dit")) {
+		    stream.write(e);
+		}
+}
 
 public static void main(String argv[]) {
  Player a= new Player();
   a.run();
-
 }	
 	
 

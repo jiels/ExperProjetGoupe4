@@ -2,12 +2,19 @@ package GameServer;
 
 
 import java.awt.event.KeyEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.JFileChooser;
 
 import Donjon.Actions;
 import Donjon.Position;
@@ -53,44 +60,95 @@ public class ServerDonjon extends Thread {
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
-				
-				joueurs.get(i).getOut().writeObject(t);
+				WriteObjectToFile(t);
+				File file = new File("src\\TmpServer\\Objets.dit");
+				final File[] filetosent = new File[1];
+				filetosent[0]=file;
+				FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+				byte[]filebyte = new byte[(int)filetosent[0].length()];
+				fileInputStream.read(filebyte);
+				joueurs.get(i).getOut().writeInt(filebyte.length);
+				joueurs.get(i).getOut().flush();
+				joueurs.get(i).getOut().write(filebyte);
 				joueurs.get(i).getOut().flush();
 			
-				Position pp = (Position)joueurs.get(i).getIn().readObject();
+				int fileByte = joueurs.get(i).getIn().readInt();
+				if(fileByte>0) {
+					byte[] file2 = new byte[fileByte];
+					joueurs.get(i).getIn().readFully(file2, 0, file2.length);
+					savefile(file2);
+				}
+				Position pp = (Position)ReadObjectFromFile();
 				joueurs.get(i).setPosition(pp);
 				joueurs.get(i).setHispositiont(pp);
 			} catch (Exception e) {e.printStackTrace();}
 		
 		}
+		
 		try {	
 			while(!winer) {
+				for(int i=0;i<joueurs.size();i++) {
+					if(!joueurs.get(i).getSocket().isConnected()) {
+						joueurs.remove(i);
+					}
+				}
 				for(int i =0;i<joueurs.size();i++) {
-					Actions cmd = (Actions)joueurs.get(i).getIn().readObject();
-					StatsJoueur p =  ServerClavier(cmd.getCmd(), joueurs.get(i));
-					System.out.println("0"+""+p.getPosition());
-					System.out.println("1"+""+joueurs.get(i).getPosition());
+					System.out.println("1"+joueurs.get(i).getPosition());
+					int fileByte = joueurs.get(i).getIn().readInt();
+					if(fileByte>0) {
+						byte[] file2 = new byte[fileByte];
+						joueurs.get(i).getIn().readFully(file2, 0, file2.length);
+						savefile(file2);
+					}
+					String cmd = (String)ReadObjectFromFile();
+					StatsJoueur p =  ServerClavier(cmd, joueurs.get(i));
 					joueurs.get(i).setJoueur(p);
-					System.out.println("2"+""+joueurs.get(i).getPosition());
+					System.out.println("2"+joueurs.get(i).getPosition());
 					
 				}
 				for(int i =0;i<joueurs.size();i++) {
-					Position a = joueurs.get(i).getPosition();
-					joueurs.get(i).getOut().writeObject(a);
-					joueurs.get(i).getOut().flush();
-					ArrayList<Position> bb = joueurs.get(i).getListMurTouch();
-					joueurs.get(i).getOut().writeObject(bb);
-					joueurs.get(i).getOut().flush();
-					String bgg = joueurs.get(i).getInfo();
-					joueurs.get(i).getOut().writeObject(bgg);
-					joueurs.get(i).getOut().flush();
+					try {
+						Position jp = joueurs.get(i).getPosition();
+						WriteObjectToFile(jp);
+						File file = new File("src\\TmpServer\\Objets.dit");
+						final File[] filetosent = new File[1];
+						filetosent[0]=file;
+						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+						byte[]filebyte = new byte[(int)filetosent[0].length()];
+						fileInputStream.read(filebyte);
+						joueurs.get(i).getOut().writeInt(filebyte.length);
+						joueurs.get(i).getOut().flush();
+						joueurs.get(i).getOut().write(filebyte);
+						joueurs.get(i).getOut().flush();
+					}catch (Exception e) {e.printStackTrace();}
+					
+					try {
+						ArrayList<Position>tm = joueurs.get(i).getListMurTouch();
+						WriteObjectToFile(tm);
+						File file = new File("src\\TmpServer\\Objets.dit");
+						final File[] filetosent = new File[1];
+						filetosent[0]=file;
+						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+						byte[]filebyte = new byte[(int)filetosent[0].length()];
+						fileInputStream.read(filebyte);
+						joueurs.get(i).getOut().writeInt(filebyte.length);
+						joueurs.get(i).getOut().flush();
+						joueurs.get(i).getOut().write(filebyte);
+						joueurs.get(i).getOut().flush();
+					}catch (Exception e) {e.printStackTrace();}
+					
+					
 					}
 				}
 			for(int i=0;i<joueurs.size();i++) {
-				joueurs.get(i).getIn().close();
-				joueurs.get(i).getOut().close();
-				joueurs.get(i).getSocket().close();
+				if(!joueurs.get(i).getSocket().isConnected()) {
+					joueurs.get(i).getOut().close();
+					joueurs.get(i).getIn().close();
+					joueurs.get(i).getSocket().close();
+					joueurs.remove(i);
+				}
 			}
+			
 		}catch (Exception e) {e.printStackTrace();}
 
 	}
@@ -278,6 +336,8 @@ public class ServerDonjon extends Thread {
 				
 				
 			}
+			
+			
 		}
 		
 	}
@@ -343,4 +403,44 @@ public class ServerDonjon extends Thread {
 		return a;
 	}
 	
+	public Object ReadObjectFromFile() {
+		 
+	    try {
+
+	        FileInputStream fileIn = new FileInputStream("src\\TmpServer\\Objetsrecu.dit");
+	        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+	        Object obj = objectIn.readObject();
+
+	        System.out.println("The Object has been read from the file");
+	        objectIn.close();
+	        return obj;
+
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        return null;
+	    }
+	}
+	
+	public void WriteObjectToFile(Object serObj) {
+		 
+        try {
+ 
+            FileOutputStream fileOut = new FileOutputStream("src\\TmpServer\\Objets.dit");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(serObj);
+            objectOut.close();
+            System.out.println("The Object  was succesfully written to a file");
+ 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+	}
+
+	public void savefile(byte[] e) throws FileNotFoundException, IOException {
+		try (
+				FileOutputStream stream = new FileOutputStream("src\\TmpServer\\Objetsrecu.dit")) {
+			    stream.write(e);
+			}
+	}
 }

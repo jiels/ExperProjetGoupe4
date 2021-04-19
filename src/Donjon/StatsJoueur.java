@@ -1,5 +1,7 @@
 package Donjon;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,8 +13,8 @@ public class StatsJoueur implements Serializable{
 	
 	private static final long serialVersionUID = -4785070648054522221L;
 	private Socket socket;
-	private ObjectOutputStream out;
-	private ObjectInputStream in ;
+	private DataOutputStream out;
+	private DataInputStream in ;
 	private Position position;
 	private int vie = 5;
 	private int potion = 0;
@@ -24,9 +26,9 @@ public class StatsJoueur implements Serializable{
 		this.socket=id;
 		this.position = p;
 		try {
-			out = new ObjectOutputStream(socket.getOutputStream());
+			out = new DataOutputStream(socket.getOutputStream());
 			out.flush();
-	        in = new ObjectInputStream(socket.getInputStream());
+	        in = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,12 +95,12 @@ public class StatsJoueur implements Serializable{
 	}
 
 
-	public ObjectOutputStream getOut() {
+	public DataOutputStream getOut() {
 		return out;
 	}
 
 
-	public ObjectInputStream getIn() {
+	public DataInputStream getIn() {
 		return in;
 	}
 
