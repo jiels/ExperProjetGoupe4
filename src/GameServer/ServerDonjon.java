@@ -87,13 +87,8 @@ public class ServerDonjon extends Thread {
 		
 		try {	
 			while(!winer) {
-				for(int i=0;i<joueurs.size();i++) {
-					if(!joueurs.get(i).getSocket().isConnected()) {
-						joueurs.remove(i);
-					}
-				}
 				for(int i =0;i<joueurs.size();i++) {
-					System.out.println("1"+joueurs.get(i).getPosition());
+					if(joueurs.get(i).getSocket().isConnected()) {
 					int fileByte = joueurs.get(i).getIn().readInt();
 					if(fileByte>0) {
 						byte[] file2 = new byte[fileByte];
@@ -103,10 +98,12 @@ public class ServerDonjon extends Thread {
 					String cmd = (String)ReadObjectFromFile();
 					StatsJoueur p =  ServerClavier(cmd, joueurs.get(i));
 					joueurs.get(i).setJoueur(p);
-					System.out.println("2"+joueurs.get(i).getPosition());
-					
+					}else {
+						joueurs.remove(i);
+					}
 				}
 				for(int i =0;i<joueurs.size();i++) {
+					if(joueurs.get(i).getSocket().isConnected()) {
 					try {
 						Position jp = joueurs.get(i).getPosition();
 						WriteObjectToFile(jp);
@@ -137,17 +134,9 @@ public class ServerDonjon extends Thread {
 						joueurs.get(i).getOut().flush();
 					}catch (Exception e) {e.printStackTrace();}
 					
-					
+					}else {joueurs.remove(i);}
 					}
 				}
-			for(int i=0;i<joueurs.size();i++) {
-				if(!joueurs.get(i).getSocket().isConnected()) {
-					joueurs.get(i).getOut().close();
-					joueurs.get(i).getIn().close();
-					joueurs.get(i).getSocket().close();
-					joueurs.remove(i);
-				}
-			}
 			
 		}catch (Exception e) {e.printStackTrace();}
 
@@ -412,7 +401,6 @@ public class ServerDonjon extends Thread {
 
 	        Object obj = objectIn.readObject();
 
-	        System.out.println("The Object has been read from the file");
 	        objectIn.close();
 	        return obj;
 
@@ -430,9 +418,6 @@ public class ServerDonjon extends Thread {
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(serObj);
             objectOut.close();
-            
-            System.out.println("The Object  was succesfully written to a file");
- 
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class Server{
 	public static final int PORT=6112;
 	private ArrayList<Socket> clientList;
+	@SuppressWarnings("unused")
 	private ArrayList<Thread> parties;
 	private ServerSocket serverSocket;
 	

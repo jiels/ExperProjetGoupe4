@@ -1,4 +1,4 @@
-package Personages;
+package Personnages;
 
 import java.awt.Image;
 

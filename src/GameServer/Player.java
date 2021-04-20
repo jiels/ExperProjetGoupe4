@@ -37,7 +37,7 @@ private Scanner sc;
 //***CONSTRUCTEUR***//
 public Player(){
 	sc = new Scanner(System.in);
-	System.out.print("Veiller entre un Pseudo: ");
+	System.out.print("Veiller entre un Pseudo(ne doit contenir  que des lettres): ");
 	id = sc.next();
 	try {
 		System.out.println("connexion au server........");
@@ -188,7 +188,18 @@ public void run() {
 			/*String a = p.getInfo();
 			System.out.println(a);*/
 	}
-} catch (Exception e) {e.printStackTrace();}
+	
+} catch (Exception e) {e.printStackTrace();
+	try {
+		System.out.println("vous etes deconnecte");
+		sc.close();
+		out.close();
+		in.close();
+		socket.close();
+	} catch (IOException i) {
+		i.printStackTrace();
+	}
+}
 	
 }
 
@@ -207,7 +218,6 @@ public Object ReadObjectFromFile() {
 
         Object obj = objectIn.readObject();
 
-        System.out.println("The Object has been read from the file");
         objectIn.close();
         return obj;
 

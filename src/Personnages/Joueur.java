@@ -1,17 +1,17 @@
-package Personages;
+package Personnages;
 
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Jouer extends Personnage{
+public class Joueur extends Personnage{
 	//***INITIALISATION***//
 	private Image imgPerso;
 	private ImageIcon icoPerso;
 	
 	
 	//**CONSTRUCTEUR***// 
-	public Jouer(int x, int y) {
+	public Joueur(int x, int y) {
 		
 	super(x,y,27,27);
 	this.icoPerso = new ImageIcon("src/images/perso0.png");

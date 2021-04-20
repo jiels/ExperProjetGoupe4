@@ -5,30 +5,33 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import Objet.PotionVie;
-import Objet.Sol;
 import Objet.Bombe;
 import Objet.Cle;
 import Objet.Mur;
 import Objet.Objet;
-import Objet.Pierre;
-import Personages.Jouer;
+import Objet.Sol;
+import Personnages.Joueur;
 
 
-@SuppressWarnings("serial")
+
 public class Donjon extends JPanel {
-//***INITIALISATION***//
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3318991719492400521L;
+	//***INITIALISATION***//
 	private ImageIcon solFond;
 	private Image  sol;
 	private int xFond1;
 	
+	@SuppressWarnings("unused")
 	private int xAlea;
+	@SuppressWarnings("unused")
 	private int yAlea;
 	private int persoX;
 	private int x;
@@ -40,12 +43,13 @@ public class Donjon extends JPanel {
 	private ArrayList<Position>listSol = new ArrayList<>();
 	private ArrayList<Position>listCle = new ArrayList<>();
 	
+	@SuppressWarnings("unused")
 	private int nbMur;
 	
 	private static int sortieX;
 	private static int sortieY;
 	
-	private Jouer joueur;
+	private Joueur joueur;
 
 	private Mur murExte;
 
@@ -69,7 +73,7 @@ public class Donjon extends JPanel {
 		this.sol = this.solFond.getImage();
 		
 		//Joueur
-		joueur = new Jouer(this.persoX,this.persoY);
+		joueur = new Joueur(this.persoX,this.persoY);
 		
 		//Placement Murs
 		murExte = new Mur(0,0);
@@ -84,7 +88,7 @@ public class Donjon extends JPanel {
 		this.requestFocusInWindow();
 		
 		
-		Thread ecranRefresh = new Thread(new SceenRefresh(this));
+		Thread ecranRefresh = new Thread(new SceneRefresh(this));
 		ecranRefresh.start();}
 	 
 	
@@ -326,6 +330,7 @@ public class Donjon extends JPanel {
 	}
 
 
+	@SuppressWarnings("static-access")
 	public void setSortieX(int sortieX) {
 		this.sortieX = sortieX;
 	}
@@ -336,11 +341,12 @@ public class Donjon extends JPanel {
 	}
 
 
+	@SuppressWarnings("static-access")
 	public void setSortieY(int sortieY) {
 		this.sortieY = sortieY;
 	}
 
-	public Jouer getJoueur() {
+	public Joueur getJoueur() {
 		return joueur;
 	}
 
