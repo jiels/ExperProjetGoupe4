@@ -55,8 +55,11 @@ public class Donjon extends JPanel {
 
 	private int xScene;
 	private int yScene;
+	private int xS;
+	private int yS;
+	private Sol sol1;
 	
-	
+
 //***CONSTRUCTEUR***//
 	public Donjon(int xScene, int yScene) {
 		super();
@@ -67,6 +70,9 @@ public class Donjon extends JPanel {
 		this.yAlea= yScene;
 		this.xScene = xScene;
 		this.yScene = yScene;
+		this.xS = persoX;
+		this.yS = persoY;
+		
 		
 		//Fond
 		solFond = new ImageIcon("src/images/sol.png");
@@ -77,6 +83,7 @@ public class Donjon extends JPanel {
 		
 		//Placement Murs
 		murExte = new Mur(0,0);
+		sol1 = new Sol(0,0);
 		
 		
 		
@@ -91,7 +98,7 @@ public class Donjon extends JPanel {
 		Thread ecranRefresh = new Thread(new SceneRefresh(this));
 		ecranRefresh.start();}
 	 
-	
+
 	
 	
 //***METHODES***//
@@ -149,32 +156,20 @@ public class Donjon extends JPanel {
 		super.paintComponent(g);
 		Graphics g2 = (Graphics2D) g;
 		
-		//ServerClavier(this.comd);
-		//Collision solide
+		if(!listBombe.isEmpty()) {
+			for (int i = 0; i < listBombe.size(); i++) {
+					Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
+			      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
+			} }
 		
-	/*	Iterator<Mur> it1 = listMur.iterator();
-		while(it1.hasNext()) {
-			solide(it1.next());
-		}*/
-		
-	
-		// Ramasse coeur
-		//joueur.ramaserPotion(p1);
-		//joueur.ramaserPotion(p2);
-		//joueur.ramaserPotion(p3);
-		
-		// bombe explose
-
-
-		
-		//Déplacement personnage
-		
-		/*this.deplacementPersoX();
-		this.deplacementPersoY();*/
-		/*joueur.setX(persoX);
-		joueur.setY(persoY);*/
 		
 
+		g2.drawImage(this.sol1.getImgSol(),xS,yS,null);
+		if(!listSol.isEmpty()) {
+			for (int i = 0; i < listSol.size(); i++) {
+					Sol s = new Sol(listSol.get(i).getX(),listSol.get(i).getY());
+			      g2.drawImage(s.getImgSol(),s.getX(),s.getY(),null);
+			} }
 		//placement du perso et du fond
 		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
 		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
@@ -193,24 +188,13 @@ public class Donjon extends JPanel {
 		
 				
 		//AFFICHAGE DES MURS
+				
 		
 				if(!listMur.isEmpty()) {
 				for (int i = 0; i < listMur.size(); i++) {
 						Mur m = new Mur(listMur.get(i).getX(),listMur.get(i).getY());
 				      g2.drawImage(m.getImgMur(),m.getX(),m.getY(),null);
 				} }
-				
-				if(!listBombe.isEmpty()) {
-					for (int i = 0; i < listBombe.size(); i++) {
-							Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
-					      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
-					} }
-	
-				if(!listSol.isEmpty()) {
-					for (int i = 0; i < listSol.size(); i++) {
-							Sol s = new Sol(listSol.get(i).getX(),listSol.get(i).getY());
-					      g2.drawImage(s.getImgSol(),s.getX(),s.getY(),null);
-					} }
 				if(!listCle.isEmpty()) {
 					for (int i = 0; i < listCle.size(); i++) {
 							Cle s = new Cle(listCle.get(i).getX(),listCle.get(i).getY());
@@ -220,56 +204,7 @@ public class Donjon extends JPanel {
 	}
 
 
-	public void ServerClavier(String cd) {
-		if(!cd.isEmpty()) {
-		for (int i=0;i<cd.length();i++) {
-			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_D) {//Doit
-				setPersoX(getPersoX()+50);
-				getJoueur().setMarche(true);
-				getJoueur().setVersDroite(true);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersB(false);
-				repaint();
-				
-			}
-			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Q) {//Gauche
-				setPersoX(getPersoX()-50);
-				getJoueur().setMarche(true);
-				getJoueur().setVersGauche(true);
-				getJoueur().setVersDroite(false);
-				getJoueur().setVersB(false);
-				repaint();
-			}
-			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_S) {//bas
-				setPersoY(getPersoY()+50);
-				getJoueur().setVersDroite(false);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersB(true);
-				getJoueur().setVersH(false);
-				getJoueur().setMarche(true);
-				repaint();
-				
-			}
-			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Z) {//haut
-				setPersoY(getPersoY()-50);
-				getJoueur().setVersDroite(false);
-				getJoueur().setVersGauche(false);
-				getJoueur().setVersH(true);
-				getJoueur().setMarche(true);
-				getJoueur().setVersB(false);
-				repaint();
-				
-			}
-			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_V) {
-				getJoueur().usePotion();
-				repaint();
-				
-			}
-			getJoueur().setMarche(false);
-			
-		}
-		}
-	}
+
 	
 	
 //***GETTER & SETTER***//
@@ -349,8 +284,6 @@ public class Donjon extends JPanel {
 	public Joueur getJoueur() {
 		return joueur;
 	}
-
-
 
 
 	public void setPersoX(int persoX) {

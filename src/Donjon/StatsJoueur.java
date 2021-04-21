@@ -21,6 +21,20 @@ public class StatsJoueur implements Serializable{
 	private ArrayList<Position> hisposition= new ArrayList<Position>();
 	private ArrayList<Position> listMurTouch = new ArrayList<Position>();
     private ArrayList<Position> listPgTouch = new ArrayList<Position>();
+    private boolean gagné =false;
+    private boolean perdu =false;
+
+	public void setGagné(boolean gagné) {
+		this.gagné = gagné;
+	}
+
+
+
+	public void setPerdu(boolean perdu) {
+		this.perdu = perdu;
+	}
+
+
 
 	public StatsJoueur(Socket  id ,Position p) {
 		this.socket=id;
@@ -33,7 +47,8 @@ public class StatsJoueur implements Serializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+   
+		
 	}
 	
 	
@@ -59,27 +74,32 @@ public class StatsJoueur implements Serializable{
 		return hisposition;
 	}
 	
+	
 	public void setHispositiont(Position e ) {
-		hisposition.add(e);
+			hisposition.add(e);
 	}
 
 
-
+	public int getVie() {
+		return this.vie;
+	}
 	public void plusVie(int vie) {
 		if(this.vie<5) {
 			this.vie += vie;
 		}
 	}
 	public void moinVie() {
-		if(this.vie>0) {
+		if(this.vie>=-1) {
 			this.vie -= 1;
 		}
 	}
 
 	public String getInfo() {
-		String inf = "vie: "+this.vie+" Posion: "+this.potion;
+		String inf = "vie: "+this.vie+" Potions: "+this.potion;
 		return inf ;
 	}
+	
+	
 
 	public void plusPotion() {
 		this.potion += 1;
@@ -87,6 +107,7 @@ public class StatsJoueur implements Serializable{
 	public void moinPotion() {
 		if(this.potion>0) {
 			this.potion -=1;
+			plusVie(1);
 		}
 	}
 
@@ -126,6 +147,20 @@ public class StatsJoueur implements Serializable{
 	public void setListPgTouch(ArrayList<Position> listPgTouch) {
 		this.listPgTouch = listPgTouch;
 	}
+
+
+
+	public boolean isGagné() {
+		return gagné;
+	}
+
+
+
+	public boolean isPerdu() {
+		return perdu;
+	}
+	
+	
 	
 	
 	

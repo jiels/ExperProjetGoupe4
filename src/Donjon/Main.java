@@ -39,9 +39,6 @@ public class Main{
 		return str;
 			
 		}
-	public void clavier(String a) {
-		this.scene.ServerClavier(a);
-	}
 	
 	
 	

@@ -127,6 +127,18 @@ public void run() {
 		out.flush();
 		
 	} catch (Exception e) {e.printStackTrace();}
+	
+	try {
+		int fileByte = in.readInt();
+		if(fileByte>0) {
+			byte[] file3 = new byte[fileByte];
+			in.readFully(file3, 0, file3.length);
+			savefile(file3);
+		}
+			ArrayList<Position>pp= extracted(ReadObjectFromFile());
+			System.out.println(pp);
+			this.map.getScene().setListSol(pp);
+	}catch (Exception e) {e.printStackTrace();}
 	System.err.println("Les action posible sont| z:devant s:dèrière q:gauche d:doite v:utiliser positionde vie");
 	
 	try{
@@ -164,7 +176,6 @@ public void run() {
 					savefile(file3);
 				}
 					Position pp = (Position)ReadObjectFromFile();
-					System.out.println(pp);
 					this.map.setJoueurPosition(pp);
 			}catch (Exception e) {e.printStackTrace();}
 			
@@ -181,12 +192,42 @@ public void run() {
 				this.map.getScene().setListMur(listeM);		
 			}catch (Exception e) {e.printStackTrace();}
 			
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+				ArrayList<Position> historique =extracted(ReadObjectFromFile());
+				this.map.getScene().setListSol(historique);	
+			}catch (Exception e) {e.printStackTrace();}
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+				ArrayList<Position> pg =extracted(ReadObjectFromFile());
+				System.out.println(pg);
+				this.map.getScene().setListBombe(pg);
+			}catch (Exception e) {e.printStackTrace();}
+			
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+				String info =(String) ReadObjectFromFile();
+				System.out.println(info);	
+			}catch (Exception e) {e.printStackTrace();}
 			
 			
 			
-			
-			/*String a = p.getInfo();
-			System.out.println(a);*/
+		
 	}
 	
 } catch (Exception e) {e.printStackTrace();
@@ -199,8 +240,7 @@ public void run() {
 	} catch (IOException i) {
 		i.printStackTrace();
 	}
-}
-	
+}	
 }
 
 

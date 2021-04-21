@@ -12,6 +12,7 @@ public class Sol extends Objet {
 	private ImageIcon  icoSol;
  
 	
+	
 	//***CONSTRUCTEUR***//
 	public Sol(int x, int y) {
 		super(x,y,39,38);
