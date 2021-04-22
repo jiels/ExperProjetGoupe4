@@ -23,6 +23,7 @@ public class StatsJoueur implements Serializable{
     private ArrayList<Position> listPgTouch = new ArrayList<Position>();
     private boolean gagné =false;
     private boolean perdu =false;
+    private String log ="";
 
 	public void setGagné(boolean gagné) {
 		this.gagné = gagné;
@@ -84,29 +85,31 @@ public class StatsJoueur implements Serializable{
 		return this.vie;
 	}
 	public void plusVie(int vie) {
-		if(this.vie<5) {
+		if(this.vie<6) {
 			this.vie += vie;
 		}
 	}
 	public void moinVie() {
-		if(this.vie>=-1) {
+		if(this.vie>=1) {
 			this.vie -= 1;
 		}
 	}
 
 	public String getInfo() {
-		String inf = "vie: "+this.vie+" Potions: "+this.potion;
+		String inf = "vie: "+vie+" Potions: "+potion;
 		return inf ;
 	}
 	
 	
 
 	public void plusPotion() {
+		this.setLog("Vous avez trouvez une potion: +1 potion");
 		this.potion += 1;
 	}
 	public void moinPotion() {
 		if(this.potion>0) {
 			this.potion -=1;
+			this.setLog("Vous avez utiliser une potion: +1 vie -1 potion");
 			plusVie(1);
 		}
 	}
@@ -159,6 +162,25 @@ public class StatsJoueur implements Serializable{
 	public boolean isPerdu() {
 		return perdu;
 	}
+
+
+
+	public String getLog() {
+		return log;
+	}
+
+
+	public void resetLog() {
+		log ="";
+		
+	}
+
+	public void setLog(String log) {
+		this.log += "\n"+log;
+	}
+	
+	
+	
 	
 	
 	

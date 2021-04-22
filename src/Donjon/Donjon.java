@@ -155,20 +155,17 @@ public class Donjon extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics g2 = (Graphics2D) g;
-		
-		if(!listBombe.isEmpty()) {
-			for (int i = 0; i < listBombe.size(); i++) {
-					Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
-			      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
-			} }
-		
-		
 
 		g2.drawImage(this.sol1.getImgSol(),xS,yS,null);
 		if(!listSol.isEmpty()) {
 			for (int i = 0; i < listSol.size(); i++) {
 					Sol s = new Sol(listSol.get(i).getX(),listSol.get(i).getY());
 			      g2.drawImage(s.getImgSol(),s.getX(),s.getY(),null);
+			} }
+		if(!listBombe.isEmpty()) {
+			for (int i = 0; i < listBombe.size(); i++) {
+					Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
+			      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
 			} }
 		//placement du perso et du fond
 		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond

@@ -55,6 +55,7 @@ public class ServerDonjon extends Thread {
 	public void run() {
 		addMur();
 		addPg();
+		System.out.println(listPg);
 		addPosion();
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
@@ -101,7 +102,11 @@ public class ServerDonjon extends Thread {
 		
 		try {	
 			while(!winer) {
+				
 				for(int i =0;i<joueurs.size();i++) {
+					if(joueurs.get(i).getSocket().isClosed()) {
+						joueurs.remove(i);
+					}
 					if(joueurs.get(i).getSocket().isConnected()) {
 					int fileByte = joueurs.get(i).getIn().readInt();
 					if(fileByte>0) {
@@ -167,7 +172,6 @@ public class ServerDonjon extends Thread {
 					
 					try {
 						ArrayList<Position>tm = joueurs.get(i).getListPgTouch();
-						System.out.println(tm);
 						WriteObjectToFile(tm);
 						File file = new File("src\\TmpServer\\Objets.dit");
 						final File[] filetosent = new File[1];
@@ -183,11 +187,37 @@ public class ServerDonjon extends Thread {
 					
 					try {
 						
-						joueurs.get(i).plusVie(1);
+						int tt =0;
 						
+							joueurs.get(i).plusVie(1);
+							for (int c =0;c<joueurs.size();c++) {
+								if(joueurs.get(i).getPosition().compareTo(joueurs.get(c).getPosition())==0){
+									if(!joueurs.get(c).isPerdu()) {
+										tt+=1;
+										joueurs.get(i).moinVie();
+										}
+									}
+								if(tt>1) {
+									joueurs.get(i).setLog("Vous etes a la même position qu'un autre joueur: -1 vie");	
+									}
+							
+								if(joueurs.get(i).getVie()<=0){
+									joueurs.get(i).setPerdu(true);
+									
+									} 
+								}
+							tt=0;
+							
+							
+							
+						
+
 						String tmpinfo = joueurs.get(i).getInfo();
 						if (joueurs.get(i).isPerdu()) {
-							tmpinfo = "Vous avez perdu !";
+							tmpinfo = "Vous avez PERDU !";
+						}
+						if (joueurs.get(i).isGagné()) {
+							tmpinfo = " Vous avez GAGNÉ !";
 						}
 						WriteObjectToFile(tmpinfo);
 						File file = new File("src\\TmpServer\\Objets.dit");
@@ -207,6 +237,21 @@ public class ServerDonjon extends Thread {
 						}
 					}catch (Exception e) {e.printStackTrace();}
 					
+					try {
+						String tmlog = joueurs.get(i).getLog();
+						WriteObjectToFile(tmlog);
+						File file = new File("src\\TmpServer\\Objets.dit");
+						final File[] filetosent = new File[1];
+						filetosent[0]=file;
+						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+						byte[]filebyte = new byte[(int)filetosent[0].length()];
+						fileInputStream.read(filebyte);
+						joueurs.get(i).getOut().writeInt(filebyte.length);
+						joueurs.get(i).getOut().flush();
+						joueurs.get(i).getOut().write(filebyte);
+						joueurs.get(i).getOut().flush();
+					}catch (Exception e) {e.printStackTrace();}
+					joueurs.get(i).resetLog();
 					}else {joueurs.remove(i);}
 					}
 				}
@@ -309,26 +354,10 @@ public class ServerDonjon extends Thread {
 	
 
 	public StatsJoueur ServerClavier(String cd ,StatsJoueur p) {
-		for(int o=0;o<joueurs.size();o++) {
-			if(joueurs.get(o).getPosition().compareTo(p.getPosition())==0){
-				p.moinVie();
-			}
-		}
-		p.plusVie(1);
 		
-		if(p.getVie()==0){
-			p.setPerdu(true);
-			
-			}
+	
 		
-		if(!cd.isEmpty()&&!p.isPerdu()) {
-			for(int o=0;o<joueurs.size();o++) {
-				if(joueurs.get(o).getPosition().compareTo(p.getPosition())==0){
-					p.moinVie();
-				}
-			}
-			p.plusVie(1);
-			
+		if(!cd.isEmpty()&&!p.isPerdu()) {	
 		for (int i=0;i<cd.length();i++) {
 			if(iterateur==0) {
 				iterateur+=1;
@@ -343,15 +372,18 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()-50;
 							p.getListMurTouch().add(listMur.get(e));
+							p.setLog("Vous avez toucher un mur");
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
+							p.setLog("Vous etes tombé dans un piege: -1 vie");
 							p.moinVie();
 							e+=1;
 							
-						}}
+						}
+						}
 					
 					p.getPosition().setX(tmpx);
 		
@@ -369,11 +401,13 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()+50;
 							p.getListMurTouch().add(listMur.get(e));
+							p.setLog("Vous avez toucher un mur");
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
+							p.setLog("Vous etes tombé dans un piege: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -392,12 +426,14 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()-50;
 							p.getListMurTouch().add(listMur.get(e));
+							p.setLog("Vous avez toucher un mur");
 							e+=1;
 					
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
+							p.setLog("Vous etes tombé dans un piege: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -418,12 +454,14 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()+50;
 							p.getListMurTouch().add(listMur.get(e));
+							p.setLog("Vous avez toucher un mur");
 							e+=1;
 							
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
+							p.setLog("Vous etes tombé dans un piege: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -435,6 +473,7 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_V) {
+				
 				p.moinPotion();
 				
 				
@@ -443,18 +482,6 @@ public class ServerDonjon extends Thread {
 			
 			
 		}
-		
-		for(int o=0;o<joueurs.size();o++) {
-			if(joueurs.get(o).getPosition().compareTo(p.getPosition())==0){
-				p.moinVie();
-			}
-		}
-		p.plusVie(1);
-		
-		if(p.getVie()==0){
-			p.setPerdu(true);
-			
-			}
 		
 	}
 		return p;

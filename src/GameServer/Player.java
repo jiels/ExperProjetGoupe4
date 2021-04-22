@@ -177,7 +177,7 @@ public void run() {
 				}
 					Position pp = (Position)ReadObjectFromFile();
 					this.map.setJoueurPosition(pp);
-			}catch (Exception e) {e.printStackTrace();}
+			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
 			
 			try {
@@ -190,7 +190,7 @@ public void run() {
 				ArrayList<Position> listeM =extracted(ReadObjectFromFile());
 				System.out.println(listeM);
 				this.map.getScene().setListMur(listeM);		
-			}catch (Exception e) {e.printStackTrace();}
+			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
 			try {
 				int fileByte = in.readInt();
@@ -201,7 +201,7 @@ public void run() {
 				}
 				ArrayList<Position> historique =extracted(ReadObjectFromFile());
 				this.map.getScene().setListSol(historique);	
-			}catch (Exception e) {e.printStackTrace();}
+			}catch (Exception e) {sc.close();e.printStackTrace();}
 			try {
 				int fileByte = in.readInt();
 				if(fileByte>0) {
@@ -212,7 +212,7 @@ public void run() {
 				ArrayList<Position> pg =extracted(ReadObjectFromFile());
 				System.out.println(pg);
 				this.map.getScene().setListBombe(pg);
-			}catch (Exception e) {e.printStackTrace();}
+			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
 			try {
 				int fileByte = in.readInt();
@@ -222,13 +222,19 @@ public void run() {
 					savefile(file3);
 				}
 				String info =(String) ReadObjectFromFile();
-				System.out.println(info);	
-			}catch (Exception e) {e.printStackTrace();}
+				System.err.println(info);	
+			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
-			
-			
-		
-	}
+			try {
+				int fileByte = in.readInt();
+				if(fileByte>0) {
+					byte[] file3 = new byte[fileByte];
+					in.readFully(file3, 0, file3.length);
+					savefile(file3);
+				}
+				String log =(String) ReadObjectFromFile();
+				System.out.println(log);	
+			}catch (Exception e) {sc.close();e.printStackTrace();}}
 	
 } catch (Exception e) {e.printStackTrace();
 	try {
@@ -238,8 +244,7 @@ public void run() {
 		in.close();
 		socket.close();
 	} catch (IOException i) {
-		i.printStackTrace();
-	}
+		i.printStackTrace();}
 }	
 }
 
