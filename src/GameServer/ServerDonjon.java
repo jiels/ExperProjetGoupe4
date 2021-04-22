@@ -261,8 +261,26 @@ public class ServerDonjon extends Thread {
 				
 				for( int h=0 ;h<joueurs.size();h++) {
 					if(joueurs.get(h).isGagné()) {
+						for(int s=0 ;s<joueurs.size();s++) {
+							try {
+								joueurs.get(s).setCle(cle);
+								Position tmlog = joueurs.get(s).getCle().get(0);
+								WriteObjectToFile(tmlog);
+								File file = new File("src\\TmpServer\\"+id+"Objets.dit");
+								final File[] filetosent = new File[1];
+								filetosent[0]=file;
+								FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+								byte[]filebyte = new byte[(int)filetosent[0].length()];
+								fileInputStream.read(filebyte);
+								joueurs.get(s).getOut().writeInt(filebyte.length);
+								joueurs.get(s).getOut().flush();
+								joueurs.get(s).getOut().write(filebyte);
+								joueurs.get(s).getOut().flush();
+							}catch (Exception e) {e.printStackTrace();}
+						}
 						joueurs.clear();
 						winer=true;
+						return;
 					}
 				}
 				

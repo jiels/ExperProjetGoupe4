@@ -31,7 +31,9 @@ private int xm;
 private int ym;
 private ClientDonjon map;
 private Scanner sc;
-
+private String info;
+private final String p="Vous avez PERDU !";
+private final String g=" Vous avez GAGNÉ !";
 //***CONSTRUCTEUR***//
 public Player(){
 	sc = new Scanner(System.in);
@@ -216,9 +218,10 @@ public void run() {
 					in.readFully(file3, 0, file3.length);
 					savefile(file3);
 				}
-				String info =(String) ReadObjectFromFile();
+				info =(String) ReadObjectFromFile();
 				System.err.println(info);	
 			}catch (Exception e) {sc.close();e.printStackTrace();}
+			
 			
 			try {
 				int fileByte = in.readInt();
@@ -229,7 +232,25 @@ public void run() {
 				}
 				String log =(String) ReadObjectFromFile();
 				System.out.println(log);	
-			}catch (Exception e) {sc.close();e.printStackTrace();}}
+			}catch (Exception e) {sc.close();e.printStackTrace();}
+			
+			try {
+				if(info.equals(g)||info.equals(p)) {
+					int fileByte = in.readInt();
+					if(fileByte>0) {
+						byte[] file3 = new byte[fileByte];
+						in.readFully(file3, 0, file3.length);
+						savefile(file3);
+					}
+					Position cle =(Position)ReadObjectFromFile();
+					this.map.getScene().setlistCle(cle);
+				}
+				
+			} catch (Exception e) {}
+	
+	
+	
+	}
 	
 } catch (Exception e) {
 	try {

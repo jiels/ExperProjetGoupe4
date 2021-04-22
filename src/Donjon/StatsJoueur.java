@@ -21,6 +21,7 @@ public class StatsJoueur implements Serializable{
 	private ArrayList<Position> hisposition= new ArrayList<Position>();
 	private ArrayList<Position> listMurTouch = new ArrayList<Position>();
     private ArrayList<Position> listPgTouch = new ArrayList<Position>();
+    private ArrayList<Position> cle = new ArrayList<Position>();
     private boolean gagné =false;
     private boolean perdu =false;
     private String log ="";
@@ -151,6 +152,18 @@ public class StatsJoueur implements Serializable{
 
 	public void setListPgTouch(ArrayList<Position> listPgTouch) {
 		this.listPgTouch = listPgTouch;
+	}
+	
+	
+	public void setCle(Position p) {
+		cle.add(p);
+	}
+
+
+
+
+	public ArrayList<Position> getCle() {
+		return cle;
 	}
 
 
