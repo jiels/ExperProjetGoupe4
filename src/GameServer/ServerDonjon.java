@@ -207,9 +207,7 @@ public class ServerDonjon extends Thread {
 							tt=0;
 							
 							
-							if(joueurs.get(i).getPosition().compareTo(cle)==0) {
-								joueurs.get(i).setGagné(true);
-							}
+							
 							
 							
 							
@@ -450,6 +448,10 @@ public class ServerDonjon extends Thread {
 						}
 					}
 					
+					if(p.getPosition().compareTo(cle)==0) {
+						p.setGagné(true);
+					}
+					
 					p.getPosition().setX(tmpx);
 		
 					
@@ -484,6 +486,9 @@ public class ServerDonjon extends Thread {
 							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
+					}
+					if(p.getPosition().compareTo(cle)==0) {
+						p.setGagné(true);
 					}
 
 
@@ -520,6 +525,9 @@ public class ServerDonjon extends Thread {
 							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
+					}
+					if(p.getPosition().compareTo(cle)==0) {
+						p.setGagné(true);
 					}
 
 		
@@ -558,6 +566,9 @@ public class ServerDonjon extends Thread {
 							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
+					}
+					if(p.getPosition().compareTo(cle)==0) {
+						p.setGagné(true);
 					}
 
 					
