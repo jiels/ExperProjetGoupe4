@@ -11,6 +11,7 @@ public class ClientDonjon implements Runnable {
 	private static String id;
 	private static Donjon scene;
 
+	@SuppressWarnings("static-access")
 	public ClientDonjon(String id,int rx,int ry) {
 		this.id=id;
 		this.rx=rx;

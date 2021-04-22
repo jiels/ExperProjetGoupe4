@@ -2,7 +2,6 @@ package GameServer;
 
 
 import java.awt.event.KeyEvent;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,10 +12,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.swing.JFileChooser;
-
-import Donjon.Actions;
 import Donjon.Position;
 import Donjon.StatsJoueur;
 
@@ -38,14 +33,15 @@ public class ServerDonjon extends Thread {
     
 //***CONTRUCTEUR***//
 	public ServerDonjon(Server server) {
+		
 		super("ServerDonjon");
 		try {
+			final int id =server.getParties().size();
+			this.id= id;
 			 this.x = largeur();
 			 this.y =hauteur();
 			 rx=50*(this.x+2)+15;
 			 ry=50*(this.y+2)+35;
-			 final int id =server.getParties().size();
-			 this.id= id;
 			 cle=positionCle();
 		}catch (Exception e) {e.printStackTrace();}
 	}

@@ -1,7 +1,7 @@
 package GameServer;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
+
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -12,15 +12,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-
-import Donjon.Actions;
 import Donjon.CommandException;
 import Donjon.Position;
-import Donjon.StatsJoueur;
+
 
 
 
@@ -29,7 +25,9 @@ private String id;
 private DataOutputStream out = null;
 private DataInputStream in =null;
 private Socket socket;
+@SuppressWarnings("unused")
 private int xm;
+@SuppressWarnings("unused")
 private int ym;
 private ClientDonjon map;
 private Scanner sc;

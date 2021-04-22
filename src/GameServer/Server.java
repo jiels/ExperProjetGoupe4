@@ -29,7 +29,7 @@ public class Server{
             int n =0;
             while(true) {
             	ServerDonjon party =new ServerDonjon(this);
-            	while(n<1) {
+            	while(n<2) {
             		Socket client = serverSocket.accept();
             		party.newPlayer(client);
             		clientList.add(client);
