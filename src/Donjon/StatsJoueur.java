@@ -31,7 +31,6 @@ public class StatsJoueur implements Serializable{
 	}
 
 
-
 	public void setPerdu(boolean perdu) {
 		this.perdu = perdu;
 	}
@@ -104,16 +103,16 @@ public class StatsJoueur implements Serializable{
 	
 
 	public void plusPotion() {
-		this.setLog("Vous avez trouvez une potion: +1 potion");
+		this.setLog("Vous avez trouver une potion: +1 potion");
 		this.potion += 1;
 	}
 	public void moinPotion() {
-		if(this.potion>0) {
+		if(this.potion>0&&vie<5) {
 			this.potion -=1;
 			this.setLog("Vous avez utiliser une potion: +1 vie -1 potion");
 			plusVie(1);
 		}else {
-			this.setLog("Vous avez essayez d'utiliser une potion mais vous en avez ! :(");
+			this.setLog("Vous ne pouver pas utiliser de potion :(");
 		}
 	}
 

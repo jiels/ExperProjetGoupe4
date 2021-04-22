@@ -17,7 +17,6 @@ public class Server{
 	private ArrayList<Thread> parties;
 	private ServerSocket serverSocket;
 	
-
 	public Server() {
         try {
         	System.out.println("Demarage du serveur.......");

@@ -165,7 +165,7 @@ public void run() {
 			out.flush();
 			System.out.println("En attent des autres joueurs......");
 			
-	
+
 			
 			try {
 				int fileByte = in.readInt();
@@ -218,10 +218,9 @@ public void run() {
 					in.readFully(file3, 0, file3.length);
 					savefile(file3);
 				}
-				info =(String) ReadObjectFromFile();
-				System.err.println(info);	
+				String log =(String) ReadObjectFromFile();
+				System.out.println(log);	
 			}catch (Exception e) {sc.close();e.printStackTrace();}
-			
 			
 			try {
 				int fileByte = in.readInt();
@@ -230,9 +229,12 @@ public void run() {
 					in.readFully(file3, 0, file3.length);
 					savefile(file3);
 				}
-				String log =(String) ReadObjectFromFile();
-				System.out.println(log);	
+				info =(String) ReadObjectFromFile();
+				System.err.println(info);	
 			}catch (Exception e) {sc.close();e.printStackTrace();}
+			
+			
+
 			
 			try {
 				if(info.equals(g)||info.equals(p)) {
@@ -244,6 +246,8 @@ public void run() {
 					}
 					Position cle =(Position)ReadObjectFromFile();
 					this.map.getScene().setlistCle(cle);
+					sc.close();
+					socket.close();
 				}
 				
 			} catch (Exception e) {}

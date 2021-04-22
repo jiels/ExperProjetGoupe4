@@ -120,7 +120,7 @@ public class ServerDonjon extends Thread {
 					}else {
 						joueurs.remove(i);
 					}
-				}
+				} 
 				for(int i =0;i<joueurs.size();i++) {
 					if(joueurs.get(i).getSocket().isConnected()) {
 					try {
@@ -213,8 +213,23 @@ public class ServerDonjon extends Thread {
 							
 							
 							
-						
+							try {
+								String tmlog = joueurs.get(i).getLog();
+								WriteObjectToFile(tmlog);
+								File file = new File("src\\TmpServer\\"+id+"Objets.dit");
+								final File[] filetosent = new File[1];
+								filetosent[0]=file;
+								FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
+								byte[]filebyte = new byte[(int)filetosent[0].length()];
+								fileInputStream.read(filebyte);
+								joueurs.get(i).getOut().writeInt(filebyte.length);
+								joueurs.get(i).getOut().flush();
+								joueurs.get(i).getOut().write(filebyte);
+								joueurs.get(i).getOut().flush();
+							}catch (Exception e) {e.printStackTrace();}
+							joueurs.get(i).resetLog();
 
+						
 						String tmpinfo = joueurs.get(i).getInfo();
 						if (joueurs.get(i).isPerdu()) {
 							tmpinfo = "Vous avez PERDU !";
@@ -240,21 +255,7 @@ public class ServerDonjon extends Thread {
 						}
 					}catch (Exception e) {e.printStackTrace();}
 					
-					try {
-						String tmlog = joueurs.get(i).getLog();
-						WriteObjectToFile(tmlog);
-						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
-						final File[] filetosent = new File[1];
-						filetosent[0]=file;
-						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
-						byte[]filebyte = new byte[(int)filetosent[0].length()];
-						fileInputStream.read(filebyte);
-						joueurs.get(i).getOut().writeInt(filebyte.length);
-						joueurs.get(i).getOut().flush();
-						joueurs.get(i).getOut().write(filebyte);
-						joueurs.get(i).getOut().flush();
-					}catch (Exception e) {e.printStackTrace();}
-					joueurs.get(i).resetLog();
+					
 					
 					}else {joueurs.remove(i);}
 					}
@@ -291,6 +292,7 @@ public class ServerDonjon extends Thread {
 					this.interrupt();
 				}
 				}
+			this.interrupt();
 			
 		}catch (Exception e) {e.printStackTrace();}
 
@@ -418,6 +420,7 @@ public class ServerDonjon extends Thread {
 				joueurs.get(i).setHispositiont(joueurs.get(i).getPosition());
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_D) {//Doit
+				p.setLog("Vous etes allé a droit");
 				int tmpx =p.getPosition().getX()+50;
 				Position tmpp = new Position(tmpx, p.getPosition().getY());
 				p.setHispositiont(tmpp);
@@ -455,6 +458,7 @@ public class ServerDonjon extends Thread {
 					
 				}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Q) {//Gauche
+				p.setLog("Vous etes allé a Gauche");
 				int tmpx = p.getPosition().getX()-50;
 				Position tmpp = new Position(tmpx, p.getPosition().getY());
 				p.setHispositiont(tmpp);
@@ -489,6 +493,7 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_S) {//bas
+				p.setLog("Vous etes allé en-bas");
 				int tmpy = p.getPosition().getY()+50;
 				Position tmpp = new Position(p.getPosition().getX(),tmpy);
 				p.setHispositiont(tmpp);
@@ -526,6 +531,7 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Z) {//haut
+				p.setLog("Vous etes allé en-haut");
 				int tmpy = p.getPosition().getY()-50;
 				Position tmpp = new Position(p.getPosition().getX(),tmpy);
 				p.setHispositiont(tmpp);
