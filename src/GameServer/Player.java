@@ -37,17 +37,17 @@ private final String g=" Vous avez GAGNÉ !";
 //***CONSTRUCTEUR***//
 public Player(){
 	sc = new Scanner(System.in);
-	System.out.print("Veiller entre un Pseudo(ne doit contenir  que des lettres): ");
-	id = sc.next();
+	System.out.print("Veuillez entrer un Pseudo (ne doit contenir que des lettres): ");
+	id = sc.next()+this.hashCode();
 	try {
-		System.out.println("connexion au server........");
+		System.out.println("connexion au serveur........");
 		socket = new Socket("127.0.0.1", 6112);
 		out = new DataOutputStream(socket.getOutputStream());
         out.flush();
         in = new DataInputStream(socket.getInputStream());
-		System.out.println("\nBienvenue a toi explorateur!");
+		System.out.println("\nBienvenue à toi explorateur!");
 	}catch (IOException e) {
-		System.out.println("Une erreur c'est produit lors de la connexion du joueur au server");
+		System.out.println("Une erreur s'est produite lors de la connexion du joueur au serveur");
 		System.exit(1);
 		}
     
@@ -109,7 +109,7 @@ public void run() {
 		map = new ClientDonjon(id,i.getX(), i.getY());
 		Thread t = new Thread(map);
 		t.start();
-		System.out.println("La partie a démarer !" );
+		System.out.println("La partie a démarré !" );
 	} catch (Exception e) {e.printStackTrace();}
 	
 	try {
@@ -138,17 +138,17 @@ public void run() {
 			ArrayList<Position>pp= extracted(ReadObjectFromFile());
 			this.map.getScene().setListSol(pp);
 	}catch (Exception e) {e.printStackTrace();}
-	System.err.println("Les action posible sont| z:devant s:dèrière q:gauche d:doite v:utiliser positionde vie");
+	System.err.println("Les actions possibles sont| z:devant s:dèrrière q:gauche d:droite v:utiliser position de vie");
 	
 	try{
 	while(true) {
 		
-			System.out.print("\nVeillez entrer quatre action :");
+			System.out.print("\nVeuillez entrer quatre actions :");
 			String comd = sc.next();
 			String comd2 = maj(comd);
 			
 			while(!commande(comd2)) {
-				System.out.print("action non reconnu réessayer : ");
+				System.out.print("action non reconnue, réessayez : ");
 				String comd3 = sc.next();
 				comd2 = maj(comd3);
 			}
@@ -163,7 +163,7 @@ public void run() {
 			out.flush();
 			out.write(filebyte);
 			out.flush();
-			System.out.println("En attent des autres joueurs......");
+			System.out.println("En attente des autres joueurs......");
 			
 
 			
@@ -237,7 +237,7 @@ public void run() {
 
 			
 			try {
-				if(info.equals(g)||info.equals(p)) {
+				if(info.equals(g)) {
 					int fileByte = in.readInt();
 					if(fileByte>0) {
 						byte[] file3 = new byte[fileByte];
@@ -258,7 +258,7 @@ public void run() {
 	
 } catch (Exception e) {
 	try {
-		System.err.println("vous etes deconnecte");
+		System.err.println("vous êtes deconnecté");
 		sc.close();
 		out.close();
 		in.close();

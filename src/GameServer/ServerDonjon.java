@@ -30,6 +30,7 @@ public class ServerDonjon extends Thread {
 	private boolean winer=false;
 	private int iterateur= 0;
 	private  int id ;
+	boolean gagné=false;
     
 //***CONTRUCTEUR***//
 	public ServerDonjon(Server server) {
@@ -54,7 +55,6 @@ public class ServerDonjon extends Thread {
 		addMur();
 		addPg();
 		addPotion();
-		System.out.println(cle);
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
@@ -102,10 +102,11 @@ public class ServerDonjon extends Thread {
 			while(!winer) {
 				
 				for(int i =0;i<joueurs.size();i++) {
-					if(joueurs.get(i).getSocket().isClosed()||!joueurs.get(i).getSocket().isConnected()) {
-						joueurs.remove(i);
-					}
+			
 					if(joueurs.get(i).getSocket().isConnected()) {
+						if(joueurs.get(i).getSocket().isClosed()||!joueurs.get(i).getSocket().isConnected()) {
+							joueurs.remove(i);
+						}
 					int fileByte = joueurs.get(i).getIn().readInt();
 					if(fileByte>0) {
 						byte[] file2 = new byte[fileByte];
@@ -196,7 +197,7 @@ public class ServerDonjon extends Thread {
 										}
 									}
 								if(tt>1) {
-									joueurs.get(i).setLog("Vous etes a la même position qu'un autre joueur: -1 vie");	
+									joueurs.get(i).setLog("Vous êtes a la même position qu'un autre joueur: -1 vie");	
 									}
 							
 								if(joueurs.get(i).getVie()<=0){
@@ -227,8 +228,10 @@ public class ServerDonjon extends Thread {
 							}catch (Exception e) {e.printStackTrace();}
 							joueurs.get(i).resetLog();
 
-						
-						String tmpinfo = joueurs.get(i).getInfo();
+						String tmpinfo="";
+						if(!joueurs.get(i).isPerdu()&&!joueurs.get(i).isGagné()) {
+						tmpinfo = joueurs.get(i).getInfo();
+						}
 						if (joueurs.get(i).isPerdu()) {
 							tmpinfo = "Vous avez PERDU !";
 						}
@@ -277,9 +280,7 @@ public class ServerDonjon extends Thread {
 								joueurs.get(s).getOut().flush();
 							}catch (Exception e) {e.printStackTrace();}
 						}
-						joueurs.clear();
 						winer=true;
-						return;
 					}
 				}
 				
@@ -410,7 +411,7 @@ public class ServerDonjon extends Thread {
 	public StatsJoueur ServerClavier(String cd ,StatsJoueur p) {
 		
 	
-		
+				
 		if(!cd.isEmpty()&&!p.isPerdu()) {	
 		for (int i=0;i<cd.length();i++) {
 			if(iterateur==0) {
@@ -418,7 +419,7 @@ public class ServerDonjon extends Thread {
 				joueurs.get(i).setHispositiont(joueurs.get(i).getPosition());
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_D) {//Doit
-				p.setLog("Vous etes allé a droit");
+				p.setLog("Vous etes allé a droite");
 				int tmpx =p.getPosition().getX()+50;
 				Position tmpp = new Position(tmpx, p.getPosition().getY());
 				p.setHispositiont(tmpp);
@@ -427,13 +428,13 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()-50;
 							p.getListMurTouch().add(listMur.get(e));
-							p.setLog("Vous avez toucher un mur");
+							p.setLog("Vous avez touché un mur");
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
-							p.setLog("Vous etes tombé dans un piege: -1 vie");
+							p.setLog("Vous êtes tombé dans un piege: -1 vie");
 							p.moinVie();
 							e+=1;
 							
@@ -443,15 +444,17 @@ public class ServerDonjon extends Thread {
 						if(listPotion.get(e).compareTo(p.getPosition())==0) {
 							p.plusPotion();
 							resetpPg(listPotion.get(e));
-							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
 					}
 					
 					if(p.getPosition().compareTo(cle)==0) {
 						p.setGagné(true);
+						gagné=true;
 					}
-					
+					if(gagné) {
+						p.setPerdu(true);
+					}
 					p.getPosition().setX(tmpx);
 		
 					
@@ -460,7 +463,7 @@ public class ServerDonjon extends Thread {
 					
 				}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Q) {//Gauche
-				p.setLog("Vous etes allé a Gauche");
+				p.setLog("Vous êtes allé à gauche");
 				int tmpx = p.getPosition().getX()-50;
 				Position tmpp = new Position(tmpx, p.getPosition().getY());
 				p.setHispositiont(tmpp);
@@ -469,13 +472,13 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==tmpx&&listMur.get(e).getY()==p.getPosition().getY()) {
 							tmpx=listMur.get(e).getX()+50;
 							p.getListMurTouch().add(listMur.get(e));
-							p.setLog("Vous avez toucher un mur");
+							p.setLog("Vous avez touché un mur");
 							e+=1;
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
-							p.setLog("Vous etes tombé dans un piege: -1 vie");
+							p.setLog("Vous êtes tombé dans un piège: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -483,14 +486,17 @@ public class ServerDonjon extends Thread {
 						if(listPotion.get(e).compareTo(p.getPosition())==0) {
 							p.plusPotion();
 							resetpPg(listPotion.get(e));
-							p.setLog("Vous etes trouvez une potion: +1 potion");
+
 							
 						}
 					}
 					if(p.getPosition().compareTo(cle)==0) {
 						p.setGagné(true);
+						gagné=true;
 					}
-
+					if(gagné) {
+						p.setPerdu(true);
+					}
 
 					p.getPosition().setX(tmpx);
 					
@@ -498,7 +504,7 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_S) {//bas
-				p.setLog("Vous etes allé en-bas");
+				p.setLog("Vous êtes allé en bas");
 				int tmpy = p.getPosition().getY()+50;
 				Position tmpp = new Position(p.getPosition().getX(),tmpy);
 				p.setHispositiont(tmpp);
@@ -507,14 +513,14 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()-50;
 							p.getListMurTouch().add(listMur.get(e));
-							p.setLog("Vous avez toucher un mur");
+							p.setLog("Vous avez touché un mur");
 							e+=1;
 					
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
-							p.setLog("Vous etes tombé dans un piege: -1 vie");
+							p.setLog("Vous êtes tombé dans un piège: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -522,14 +528,16 @@ public class ServerDonjon extends Thread {
 						if(listPotion.get(e).compareTo(p.getPosition())==0) {
 							p.plusPotion();
 							resetpPg(listPotion.get(e));
-							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
 					}
 					if(p.getPosition().compareTo(cle)==0) {
 						p.setGagné(true);
+						gagné=true;
 					}
-
+					if(gagné) {
+						p.setPerdu(true);
+					}
 		
 					p.getPosition().setY(tmpy);
 					
@@ -539,7 +547,7 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_Z) {//haut
-				p.setLog("Vous etes allé en-haut");
+				p.setLog("Vous êtes allé en haut");
 				int tmpy = p.getPosition().getY()-50;
 				Position tmpp = new Position(p.getPosition().getX(),tmpy);
 				p.setHispositiont(tmpp);
@@ -548,14 +556,14 @@ public class ServerDonjon extends Thread {
 						if(listMur.get(e).getX()==p.getPosition().getX()&&listMur.get(e).getY()==tmpy) {
 							tmpy=listMur.get(e).getY()+50;
 							p.getListMurTouch().add(listMur.get(e));
-							p.setLog("Vous avez toucher un mur");
+							p.setLog("Vous avez touché un mur");
 							e+=1;
 							
 						}}
 					for(int e=0;e<listPg.size();e++) {
 						if(listPg.get(e).compareTo(p.getPosition())==0) {
 							p.getListPgTouch().add(listPg.get(e));
-							p.setLog("Vous etes tombé dans un piege: -1 vie");
+							p.setLog("Vous êtes tombé dans un piège: -1 vie");
 							p.moinVie();
 							e+=1;
 						}}
@@ -563,14 +571,16 @@ public class ServerDonjon extends Thread {
 						if(listPotion.get(e).compareTo(p.getPosition())==0) {
 							p.plusPotion();
 							resetpPg(listPotion.get(e));
-							p.setLog("Vous etes trouvez une potion: +1 potion");
 							
 						}
 					}
 					if(p.getPosition().compareTo(cle)==0) {
 						p.setGagné(true);
+						gagné=true;
 					}
-
+					if(gagné) {
+						p.setPerdu(true);
+					}
 					
 					p.getPosition().setY(tmpy);
 	

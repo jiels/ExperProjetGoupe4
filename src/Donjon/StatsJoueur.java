@@ -96,23 +96,23 @@ public class StatsJoueur implements Serializable{
 	}
 
 	public String getInfo() {
-		String inf = "vie: "+vie+" Potions: "+potion;
+		String inf = "Vie: "+vie+" Potions: "+potion;
 		return inf ;
 	}
 	
 	
 
 	public void plusPotion() {
-		this.setLog("Vous avez trouver une potion: +1 potion");
+		this.setLog("Vous avez trouvé une potion: +1 potion");
 		this.potion += 1;
 	}
 	public void moinPotion() {
 		if(this.potion>0&&vie<5) {
 			this.potion -=1;
-			this.setLog("Vous avez utiliser une potion: +1 vie -1 potion");
+			this.setLog("Vous avez utilisé une potion: +1 vie -1 potion");
 			plusVie(1);
 		}else {
-			this.setLog("Vous ne pouver pas utiliser de potion :(");
+			this.setLog("Vous ne pouvez pas utiliser de potion :(");
 		}
 	}
 
