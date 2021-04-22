@@ -85,12 +85,6 @@ public class Donjon extends JPanel {
 		murExte = new Mur(0,0);
 		sol1 = new Sol(0,0);
 		
-		
-		
-
-		
-		///////////////////////////
-		
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 		
@@ -103,47 +97,7 @@ public class Donjon extends JPanel {
 	
 //***METHODES***//
 	
-	public void deplacementPersoX() {
-		if(this.persoX==xScene-100) {
-			this.persoX = this.persoX -4;
-		}
-		else if (this.persoX==35){
-			this.persoX = this.persoX +3;
-		}
-		else{
-			this.persoX = this.persoX + this.x;
-		}
-	}
-	
-	public void deplacementPersoY() {
-		if(this.persoY==30) {
-			this.persoY = this.persoY +4;
-		}
-		else if(this.persoY==yScene-110) {
-			this.persoY = this.persoY -4;
-		}
-		else {
-			this.persoY = this.persoY + this.y;
-		}
-	}
-	
-	public void solide(Objet objet) {
-		
-		if(joueur.collision(objet)) {
-			if(joueur.isVersDroite()) {
-				this.persoX=objet.getX()-50;
-			}
-			if(joueur.isVersGauche()) {
-				this.persoX=objet.getX()+50;
-			}
-			if(joueur.isVersH()) {
-				this.persoY=objet.getX()+50;
-			}
-			if(joueur.isVersB()) {
-				this.persoY=objet.getX()-50;
-			}
-		}
-	}
+
 	public int genererInt(int borneInf, int borneSup){
 		   Random random = new Random();
 		   int nb;
@@ -167,9 +121,16 @@ public class Donjon extends JPanel {
 					Bombe b = new Bombe(listBombe.get(i).getX(),listBombe.get(i).getY());
 			      g2.drawImage(b.getImgBombe(),b.getX(),b.getY(),null);
 			} }
+		
+		
+		
 		//placement du perso et du fond
-		g2.drawImage(this.sol, this.xFond1, 0, null);//dessin de l'image de fond
-		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);//posistion du personnage
+		g2.drawImage(this.sol, this.xFond1, 0, null);
+		g2.drawImage(this.joueur.marche("joueur", 5),joueur.getX(),joueur.getY(), null);
+		
+		
+		
+		
 		
 		//placement des murs de délimitation de la zone d'action du personnage
 		
@@ -179,8 +140,7 @@ public class Donjon extends JPanel {
 							g2.drawImage(this.murExte.getImgMur(),x,y,null);
 					}	
 				}}
-				//540 = 10 et 550 = 11
-				// 1/5 = 20% de part de murs ? 
+				
 				
 		
 				
@@ -205,10 +165,7 @@ public class Donjon extends JPanel {
 	
 	
 //***GETTER & SETTER***//
-	public String info() {
-		String str = "Vie:"+this.getJoueur().getVie()+" Potion:"+this.getJoueur().getPotion();
-		return str;}
-	
+
 	public int getX() {
 		return x;
 	}

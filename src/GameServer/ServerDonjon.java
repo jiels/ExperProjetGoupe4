@@ -34,6 +34,7 @@ public class ServerDonjon extends Thread {
 	private Position cle ;
 	private boolean winer=false;
 	private int iterateur= 0;
+	private  int id ;
     
 //***CONTRUCTEUR***//
 	public ServerDonjon(Server server) {
@@ -43,7 +44,8 @@ public class ServerDonjon extends Thread {
 			 this.y =hauteur();
 			 rx=50*(this.x+2)+15;
 			 ry=50*(this.y+2)+35;
-			 
+			 final int id =server.getParties().size();
+			 this.id= id;
 			 cle=positionCle();
 		}catch (Exception e) {e.printStackTrace();}
 	}
@@ -55,13 +57,13 @@ public class ServerDonjon extends Thread {
 	public void run() {
 		addMur();
 		addPg();
-		System.out.println(listPg);
-		addPosion();
+		addPotion();
+		System.out.println(cle);
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
 				WriteObjectToFile(t);
-				File file = new File("src\\TmpServer\\Objets.dit");
+				File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 				final File[] filetosent = new File[1];
 				filetosent[0]=file;
 				FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -84,7 +86,7 @@ public class ServerDonjon extends Thread {
 				joueurs.get(i).setHispositiont(pp);
 				try {
 					WriteObjectToFile(joueurs.get(i).getHispositiont());
-					File file3 = new File("src\\TmpServer\\Objets.dit");
+					File file3 = new File("src\\TmpServer\\"+id+"Objets.dit");
 					final File[] filetosent3 = new File[1];
 					filetosent3[0]=file3;
 					FileInputStream fileInputStream3= new FileInputStream(filetosent3[0].getAbsolutePath());
@@ -104,7 +106,7 @@ public class ServerDonjon extends Thread {
 			while(!winer) {
 				
 				for(int i =0;i<joueurs.size();i++) {
-					if(joueurs.get(i).getSocket().isClosed()) {
+					if(joueurs.get(i).getSocket().isClosed()||!joueurs.get(i).getSocket().isConnected()) {
 						joueurs.remove(i);
 					}
 					if(joueurs.get(i).getSocket().isConnected()) {
@@ -128,7 +130,7 @@ public class ServerDonjon extends Thread {
 					try {
 						Position jp = joueurs.get(i).getPosition();
 						WriteObjectToFile(jp);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -143,7 +145,7 @@ public class ServerDonjon extends Thread {
 					try {
 						ArrayList<Position>tm = joueurs.get(i).getListMurTouch();
 						WriteObjectToFile(tm);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -158,7 +160,7 @@ public class ServerDonjon extends Thread {
 					try {
 						ArrayList<Position>tm = joueurs.get(i).getHispositiont();
 						WriteObjectToFile(tm);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -173,7 +175,7 @@ public class ServerDonjon extends Thread {
 					try {
 						ArrayList<Position>tm = joueurs.get(i).getListPgTouch();
 						WriteObjectToFile(tm);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -209,6 +211,11 @@ public class ServerDonjon extends Thread {
 							tt=0;
 							
 							
+							if(joueurs.get(i).getPosition().compareTo(cle)==0) {
+								joueurs.get(i).setGagné(true);
+							}
+							
+							
 							
 						
 
@@ -220,7 +227,7 @@ public class ServerDonjon extends Thread {
 							tmpinfo = " Vous avez GAGNÉ !";
 						}
 						WriteObjectToFile(tmpinfo);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -240,7 +247,7 @@ public class ServerDonjon extends Thread {
 					try {
 						String tmlog = joueurs.get(i).getLog();
 						WriteObjectToFile(tmlog);
-						File file = new File("src\\TmpServer\\Objets.dit");
+						File file = new File("src\\TmpServer\\"+id+"Objets.dit");
 						final File[] filetosent = new File[1];
 						filetosent[0]=file;
 						FileInputStream fileInputStream= new FileInputStream(filetosent[0].getAbsolutePath());
@@ -252,8 +259,23 @@ public class ServerDonjon extends Thread {
 						joueurs.get(i).getOut().flush();
 					}catch (Exception e) {e.printStackTrace();}
 					joueurs.get(i).resetLog();
+					
 					}else {joueurs.remove(i);}
 					}
+				
+				for( int h=0 ;h<joueurs.size();h++) {
+					if(joueurs.get(h).isGagné()) {
+						joueurs.clear();
+						winer=true;
+					}
+				}
+				
+				
+				
+				
+				if(joueurs.size()==0) {
+					this.interrupt();
+				}
 				}
 			
 		}catch (Exception e) {e.printStackTrace();}
@@ -334,8 +356,26 @@ public class ServerDonjon extends Thread {
 			} 
 		}
 	
+	public void resetpPg(Position g) {
+		boolean t = false;
+		int x;
+		int y;
+		while(!t) {
+			x=50*genererInt(1,(rx-115)/50);
+			y=50*genererInt(1,(ry-135)/50);
+			Position a = new Position(x,y);
+			if(a.compareTo(cle)==-1&&comparListMur(a)&&comparJoueurs(a)&&comparListpg(a)){//marche pas : 2 murs peuvent avoir la meme coordonnée
+				g.setX(a.getX());
+				g.setY(a.getY());
+				t=true;
+				}
+			
+		}
+		
+	}
 	
-	private void addPosion() { // Alea des murs
+	
+	private void addPotion() { // Alea des murs
 		int x;
 		int y;
 		int nbmur =5;
@@ -384,6 +424,14 @@ public class ServerDonjon extends Thread {
 							
 						}
 						}
+					for(int e=0;e<listPotion.size();e++) {
+						if(listPotion.get(e).compareTo(p.getPosition())==0) {
+							p.plusPotion();
+							resetpPg(listPotion.get(e));
+							p.setLog("Vous etes trouvez une potion: +1 potion");
+							
+						}
+					}
 					
 					p.getPosition().setX(tmpx);
 		
@@ -411,6 +459,15 @@ public class ServerDonjon extends Thread {
 							p.moinVie();
 							e+=1;
 						}}
+					for(int e=0;e<listPotion.size();e++) {
+						if(listPotion.get(e).compareTo(p.getPosition())==0) {
+							p.plusPotion();
+							resetpPg(listPotion.get(e));
+							p.setLog("Vous etes trouvez une potion: +1 potion");
+							
+						}
+					}
+
 
 					p.getPosition().setX(tmpx);
 					
@@ -437,6 +494,15 @@ public class ServerDonjon extends Thread {
 							p.moinVie();
 							e+=1;
 						}}
+					for(int e=0;e<listPotion.size();e++) {
+						if(listPotion.get(e).compareTo(p.getPosition())==0) {
+							p.plusPotion();
+							resetpPg(listPotion.get(e));
+							p.setLog("Vous etes trouvez une potion: +1 potion");
+							
+						}
+					}
+
 		
 					p.getPosition().setY(tmpy);
 					
@@ -465,6 +531,15 @@ public class ServerDonjon extends Thread {
 							p.moinVie();
 							e+=1;
 						}}
+					for(int e=0;e<listPotion.size();e++) {
+						if(listPotion.get(e).compareTo(p.getPosition())==0) {
+							p.plusPotion();
+							resetpPg(listPotion.get(e));
+							p.setLog("Vous etes trouvez une potion: +1 potion");
+							
+						}
+					}
+
 					
 					p.getPosition().setY(tmpy);
 	
@@ -473,7 +548,6 @@ public class ServerDonjon extends Thread {
 				
 			}
 			if(String.valueOf(cd.charAt(i)).hashCode()==KeyEvent.VK_V) {
-				
 				p.moinPotion();
 				
 				
@@ -496,6 +570,7 @@ public class ServerDonjon extends Thread {
 				}
 				else {
 					t=false;
+					return t;
 				}
 			}
 		}
@@ -510,6 +585,7 @@ public class ServerDonjon extends Thread {
 			}
 			else{
 				a=false;
+				return a;
 			}
 		}
 		return a;
@@ -524,6 +600,7 @@ public class ServerDonjon extends Thread {
 				}
 				else {
 					a=false;
+					return a;
 					
 				}
 			}
@@ -540,6 +617,7 @@ public class ServerDonjon extends Thread {
 				}
 				else {
 					a=false;
+					return a;
 				}
 			}
 		}
@@ -550,7 +628,7 @@ public class ServerDonjon extends Thread {
 		 
 	    try {
 
-	        FileInputStream fileIn = new FileInputStream("src\\TmpServer\\Objetsrecu.dit");
+	        FileInputStream fileIn = new FileInputStream("src\\TmpServer\\"+id+"Objetsrecu.dit");
 	        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
 	        Object obj = objectIn.readObject();
@@ -568,7 +646,7 @@ public class ServerDonjon extends Thread {
 		 
         try {
  
-            FileOutputStream fileOut = new FileOutputStream("src\\TmpServer\\Objets.dit");
+            FileOutputStream fileOut = new FileOutputStream("src\\TmpServer\\"+id+"Objets.dit");
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(serObj);
             objectOut.close();
@@ -579,8 +657,19 @@ public class ServerDonjon extends Thread {
 
 	public void savefile(byte[] e) throws FileNotFoundException, IOException {
 		try (
-				FileOutputStream stream = new FileOutputStream("src\\TmpServer\\Objetsrecu.dit")) {
+				FileOutputStream stream = new FileOutputStream("src\\TmpServer\\"+id+"Objetsrecu.dit")) {
 			    stream.write(e);
 			}
 	}
+
+
+
+
+
+	public ArrayList<StatsJoueur> getJoueurs() {
+		return joueurs;
+	}
+
+
+
 }

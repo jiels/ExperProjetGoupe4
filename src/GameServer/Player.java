@@ -136,7 +136,6 @@ public void run() {
 			savefile(file3);
 		}
 			ArrayList<Position>pp= extracted(ReadObjectFromFile());
-			System.out.println(pp);
 			this.map.getScene().setListSol(pp);
 	}catch (Exception e) {e.printStackTrace();}
 	System.err.println("Les action posible sont| z:devant s:dèrière q:gauche d:doite v:utiliser positionde vie");
@@ -188,7 +187,6 @@ public void run() {
 					savefile(file3);
 				}
 				ArrayList<Position> listeM =extracted(ReadObjectFromFile());
-				System.out.println(listeM);
 				this.map.getScene().setListMur(listeM);		
 			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
@@ -210,7 +208,6 @@ public void run() {
 					savefile(file3);
 				}
 				ArrayList<Position> pg =extracted(ReadObjectFromFile());
-				System.out.println(pg);
 				this.map.getScene().setListBombe(pg);
 			}catch (Exception e) {sc.close();e.printStackTrace();}
 			
@@ -236,9 +233,9 @@ public void run() {
 				System.out.println(log);	
 			}catch (Exception e) {sc.close();e.printStackTrace();}}
 	
-} catch (Exception e) {e.printStackTrace();
+} catch (Exception e) {
 	try {
-		System.out.println("vous etes deconnecte");
+		System.err.println("vous etes deconnecte");
 		sc.close();
 		out.close();
 		in.close();

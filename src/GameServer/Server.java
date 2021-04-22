@@ -29,14 +29,20 @@ public class Server{
             int n =0;
             while(true) {
             	ServerDonjon party =new ServerDonjon(this);
-            	while(n<2) {
+            	while(n<1) {
             		Socket client = serverSocket.accept();
             		party.newPlayer(client);
             		clientList.add(client);
             		n+=1;
             		}
+            	parties.add(party);
             	party.start();
             	n=0;
+            	for (int i =0 ; i< parties.size();i++) {
+            		if(!parties.get(i).isInterrupted()) {
+            			parties.remove(i);
+            		}
+            	}
         
         }	
   
@@ -44,6 +50,11 @@ public class Server{
         
                 
         }
+
+
+	public ArrayList<Thread> getParties() {
+		return parties;
+	}
 
 
 	public static void main(String argv[]) throws UnknownHostException, IOException {

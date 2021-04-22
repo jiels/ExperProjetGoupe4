@@ -111,6 +111,8 @@ public class StatsJoueur implements Serializable{
 			this.potion -=1;
 			this.setLog("Vous avez utiliser une potion: +1 vie -1 potion");
 			plusVie(1);
+		}else {
+			this.setLog("Vous avez essayez d'utiliser une potion mais vous en avez ! :(");
 		}
 	}
 
