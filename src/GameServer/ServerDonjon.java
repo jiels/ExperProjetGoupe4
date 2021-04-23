@@ -55,6 +55,7 @@ public class ServerDonjon extends Thread {
 		addMur();
 		addPg();
 		addPotion();
+		System.out.println(cle);
 		Position t = new Position(rx, ry);
 		for(int i =0;i<joueurs.size();i++) {
 			try {
@@ -107,13 +108,16 @@ public class ServerDonjon extends Thread {
 						if(joueurs.get(i).getSocket().isClosed()||!joueurs.get(i).getSocket().isConnected()) {
 							joueurs.remove(i);
 						}
+						
+					if(joueurs.get(i).getSocket().isConnected()) {
 					int fileByte = joueurs.get(i).getIn().readInt();
 					if(fileByte>0) {
 						byte[] file2 = new byte[fileByte];
 						joueurs.get(i).getIn().readFully(file2, 0, file2.length);
 						savefile(file2);
 					}
-	
+					}
+					
 					String cmd = (String)ReadObjectFromFile();
 					StatsJoueur p =  ServerClavier(cmd, joueurs.get(i));
 					
@@ -250,10 +254,7 @@ public class ServerDonjon extends Thread {
 						joueurs.get(i).getOut().write(filebyte);
 						joueurs.get(i).getOut().flush();
 						
-						if (joueurs.get(i).isPerdu()) {
-							joueurs.get(i).getOut().close();
-							joueurs.get(i).getIn().close();
-						}
+			
 					}catch (Exception e) {e.printStackTrace();}
 					
 					
@@ -282,6 +283,11 @@ public class ServerDonjon extends Thread {
 						}
 						winer=true;
 					}
+					if (joueurs.get(h).isPerdu()) {
+						joueurs.get(h).getOut().close();
+						joueurs.get(h).getIn().close();
+					}
+					
 				}
 				
 				
